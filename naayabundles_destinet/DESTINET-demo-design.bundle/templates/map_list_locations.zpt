@@ -40,7 +40,7 @@
 	</span>
 </div>
 
-<p i18n:translate="">This page offers the tabular format of the map locations, as resulted from the search filters applied on the map.</p>
+<p i18n:translate="">This page offers the tabular format of the map locations, as resulted from the search filters applied on the map:</p>
 
 <noscript>
 	<form action="downloadLocationsKml" method="post">

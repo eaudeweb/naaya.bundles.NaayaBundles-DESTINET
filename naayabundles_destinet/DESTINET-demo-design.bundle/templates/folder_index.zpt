@@ -19,6 +19,11 @@
 </metal:block>
 
 <metal:block metal:fill-slot="head">
+  <style>
+    .show_more{
+      font-weight: bold;
+    }
+  </style>
 	<script>(function(d, s, id) {
 	  var js, fjs = d.getElementsByTagName(s)[0];
 	  if (d.getElementById(id)) return;
@@ -33,16 +38,30 @@
 			$('.hidden').hide();
 			$('.hidden').each(function(){
 				if ($(this).attr('id') != 'dialog-delete-confirm'){
-					$(this).before('<img class="show_more" src="'+plus_url+'"/>');
+					$(this).before('<img class="show_more" src=' + plus_url +' /> <a class="show_more" href="javascript:void(0)">More<' + '/a>');
 				}
 			});
-			$('.show_more').click(function(){
-				if ($(this).attr('src') == plus_url){
-					$(this).attr('src', minus_url);
+			$('a.show_more').click(function(){
+				if ($(this).text() == 'More'){
+					$(this).text('Less');
+					$(this).prev().attr('src', minus_url);
 					$(this).next().slideDown();
 				}
 				else {
 					$(this).next().slideUp();
+					$(this).text('More');
+					$(this).prev().attr('src', plus_url);
+				}
+			});
+			$('img.show_more').click(function(){
+				if ($(this).attr('src') == plus_url){
+					$(this).next().text('Less');
+					$(this).attr('src', minus_url);
+					$(this).next().next().slideDown();
+				}
+				else {
+					$(this).next().next().slideUp();
+					$(this).next().text('More');
 					$(this).attr('src', plus_url);
 				}
 			});
@@ -104,7 +123,7 @@
 </div>
 <p tal:condition="python:here.description!=''" tal:content="structure here/description" />
 
-<!--div tal:condition="python:request.AUTHENTICATED_USER.has_role(['Manager', 'Administrator'], here)"-->
+<div tal:condition="python:request.AUTHENTICATED_USER.has_role(['Manager', 'Administrator'], here)">
 <metal:block use-macro="python:here.getFormsTool().getForm('folder_listing').macros['listing']">
 	<metal:block fill-slot="menu_extension">
 		<span tal:replace="structure here/menusubmissions" />
@@ -116,12 +135,13 @@
 		</tal:block>
 	</metal:block>
 </metal:block>
-<!--/div-->
+</div>
 
 </div>
 
 <metal:block metal:define-slot="folder_footer">
 <div id="folder_footer" class="folder_footer">
+<div tal:replace="nothing">
 	<a class="download_link"
 		rel="nofollow" href="./zip_export/do_export"
 		title="Download the contents of this folder to a Zip file"
@@ -129,6 +149,7 @@
 		i18n:attributes="title"
 		i18n:translate="">Zip download</a>
 	<div class="fb-like" data-send="false" data-width="275" data-show-faces="false"></div>
+</div>
 </div>
 <div class="clearer"></div>
 </metal:block>

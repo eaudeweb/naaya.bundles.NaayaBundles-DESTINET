@@ -32,6 +32,9 @@
             </tal:block>
             <a tal:condition="python:here.hasVersion() and here.isVersionAuthor()" tal:attributes="href string:${here/absolute_url}/edit_html"><span i18n:translate="">Version control</span></a>
             <strong tal:condition="python:here.hasVersion() and not here.isVersionAuthor()"><span i18n:translate="">This item has been checked out by another user</span>(<span tal:replace="here/checkout_user" />)</strong>
+            <a tal:condition="here/checkPermissionPublishObjects"
+              tal:attributes="href string:${here/absolute_url}/admin_assign_role_html">
+                <span i18n:translate="">Assign local editor role</span></a>
         </div>
         </tal:block>
 

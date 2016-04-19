@@ -11,18 +11,40 @@
         <meta tal:condition="here/keywords" tal:attributes="content here/keywords" name="keywords" />
         <meta tal:attributes="content here/contributor" name="author" />
         <meta tal:attributes="content here/gl_get_selected_language" name="dc.language" />
+        <script>
+          $(document).ready(function(){
+            var plus_url = 'misc_/Naaya/plus.gif';
+            var minus_url = 'misc_/Naaya/minus.gif';
+            $('.hidden').hide();
+            $('.hidden').each(function(){
+              if ($(this).attr('id') != 'dialog-delete-confirm'){
+                $(this).before('<img class="show_more" src="'+plus_url+'"/>');
+              }
+            });
+            $('.show_more').click(function(){
+              if ($(this).attr('src') == plus_url){
+                $(this).attr('src', minus_url);
+                $(this).next().slideDown();
+              }
+              else {
+                $(this).next().slideUp();
+                $(this).attr('src', plus_url);
+              }
+            });
+          });
+        </script>
     </metal:block>
 
     <metal:block tal:define="is_ratable here/is_ratable" fill-slot="body">
         <div class="content-index-page" id="center_content">
         <h1><img tal:attributes="src python:test(here.approved, here.icon, here.icon_marked); title here/get_meta_label; alt here/get_meta_label" border="0" /> <span tal:replace="here/title_or_id" />
                 <tal:block condition="is_ratable" replace="structure here/user_rating_view|nothing"/>
-                <span class="available_langs" tal:condition="python:here.item_has_title(here, here.title)">
+                <!--<span class="available_langs" tal:condition="python:here.item_has_title(here, here.title)">
                     <span i18n:translate="">Item only translated in </span>
                     <span tal:repeat="lang here/gl_get_languages_map">
                         <a tal:content="python:' %s' % lang['title']" tal:condition="python:not lang['selected'] and here.getLocalProperty('title', lang['id'])" tal:attributes="href python:'gl_changeLanguage?old_lang=%s' % (lang['id'])" />
                     </span>
-                </span>
+                </span>-->
         </h1>
         <tal:block tal:condition="python:here.checkPermissionEditObject()">
         <div id="admin_this_folder">

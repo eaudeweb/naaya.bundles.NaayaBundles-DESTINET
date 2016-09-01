@@ -134,6 +134,10 @@
             <th i18n:translate="">Country</th>
             <td tal:content="here/coverage" />
         </tr>
+        <tr tal:condition="here/keywords | nothing">
+            <th i18n:translate="">Keywords</th>
+            <td tal:content="here/keywords" />
+        </tr>
         <!-- <tr tal:define="title python:portal_map.getSymbolTitle(here.geo_type); -->
         <!--     picture python:portal_map.getSymbolPicture(here.geo_type)" -->
         <!--     tal:condition="python: title != ''"> -->

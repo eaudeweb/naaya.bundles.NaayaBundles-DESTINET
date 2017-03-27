@@ -73,7 +73,7 @@
 
 <tal:block define="right_portlets python:here.get_right_portlets_locations_objects(here)">
 
-<div id="center_content" tal:attributes="style python:test(request.AUTHENTICATED_USER.has_role(['Manager', 'Administrator'], here) or len(right_portlets)>0, 'width: 78%;; overflow-x: auto;;', '')">
+<div id="center_content" class="main-content">
 <tal:block define="objects_info here/checkPermissionManageObjects;
     folders_list python:objects_info[6];
     objects_list python:objects_info[7];

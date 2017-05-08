@@ -7,7 +7,8 @@
 <metal:block metal:fill-slot="head">
 	<meta tal:attributes="content here/gl_get_selected_language" name="dc.language" />
 	<meta i18n:attributes="content" content="Interactive map for the Geo-tagged information" name="description" />
-	<link rel="stylesheet" type="text/css" media="screen" href="misc_/Naaya/jquery.autocomplete.css" />
+  <link rel="stylesheet" type="text/css" media="screen" href="./jquery.autocomplete.1.1.css" />
+<script type="text/javascript" src="./jquery.history.js" ></script>
 </metal:block>
 
 <metal:block metal:fill-slot="body">
@@ -43,18 +44,18 @@
 			<strong i18n:name="title" i18n:translate="">Search and Display Instructions:</strong>
 			The right hand search bar allows you first to zoom to a specific location of the map.
 			To define your search, enter a keyword (optional), then check-mark the boxes to choose what
-			you want to display. To <strong i18n:name="display" i18n:translate="">display</strong>
+			you want to display. <tal:block condition="here/checkPermissionPublishObjects">To <strong i18n:name="display" i18n:translate="">display</strong>
 			your search results, you can also
 			<a href="." id="view_as_list" i18n:name="view_list" i18n:translate="">
-			view selected locations as a list</a>( A-Z or by country),
+			view selected locations as a list</a> (A-Z or by country),
 			<a href="." id="view_in_google_earth" i18n:name="view_g_earth" i18n:translate="">
-			view them in Google Earth</a><tal:block condition="here/checkPermissionPublishObjects">,
+			view them in Google Earth</a>,
 			<a href="." id="download_georss" i18n:name="GeoRSS" i18n:translate="">
 			download them in GeoRSS format</a> or <a href="." id="download_contacts_csv"
-			i18n:name="CSV" i18n:translate="">download contacts in XLS format</a></tal:block>.
+			i18n:name="CSV" i18n:translate="">download contacts in XLS format</a>.</tal:block>
 			Currently displaying <strong id="record_counter" i18n:name="counter"></strong>
 			location(s).
-			<br i18n:name="br"/>
+			<br i18n:name="br"/><br i18n:name="br"/>
 		</p>
 		<div id="map" tal:attributes="style string:width: 100%;; height: ${height}px;;"></div>
 		<br clear="all" style="clear:both"/>
@@ -227,7 +228,7 @@
 			<div class="portalmap_portlet_box" style="border-top:3px solid #BBBBBB">
 				<div class="portalmap_portlet_header" i18n:translate=""
 					style="text-align:center; width: 75%; float: left;">
-					6. Click “Go” to display results
+					6. Click &ldquo;Go&rdquo; to display results
 				</div>
 				<input style="background-color: #6CD4E1; border: 1px solid #A0A0A0; float: right; margin-top: 20px; padding: 4px 10px;" type="button" name="master_search" id="do_master_search"
 				value="Go" onclick="startMapRefresh()" i18n:attributes="value"/>
@@ -247,6 +248,7 @@
 
 <script type="text/javascript">
 // not using document.ready because then IE6 won't load yahoo maps :(
+
 showPageElements();
 if (naaya_map_engine.name != 'bing') {
     window.map_engine = naaya_map_engine.portal_map('map');
@@ -260,7 +262,18 @@ if (naaya_map_engine.name != 'bing') {
         }
     }, 10);
 }
+
 isSelected = false; // destinet - by default we have no checkboxes selected
+  
+
+if (typeof window.naaya_openlayers_map_api_config != 'undefined') {
+window.map_engine.set_zoom_and_center(
+    {'lat':naaya_openlayers_map_api_config.lat_center, 
+     'lon':naaya_openlayers_map_api_config.lon_center, 
+     'zoom':naaya_openlayers_map_api_config.map_zoom * 1
+    });
+};
+
 </script>
 </tal:block>
 

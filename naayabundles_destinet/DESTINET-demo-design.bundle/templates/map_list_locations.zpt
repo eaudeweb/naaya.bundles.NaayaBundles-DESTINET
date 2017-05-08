@@ -3,6 +3,20 @@
 
 <script type="text/javascript" src="++resource++destinet.keywords/keywords.js"></script>
 
+<script type="text/javascript">
+$(document).ready(function(){
+	$('.select-all').click(function(e){
+		//Select toggle for all items
+		var input_button = $(this).attr('id') == 'btn_select';
+		var checked = input_button ? $(this).hasClass('clicked') : !$(this).attr('checked');
+		if (input_button){//not an input[type=checkbox]
+			$(this).toggleClass('clicked');
+		}
+		$('#folderfile_list td.checkbox input[type=checkbox]').attr('checked', !checked);
+	});
+})
+</script>
+
 <h1 i18n:translate="">List locations</h1>
 
 <tal:block 
@@ -40,7 +54,7 @@
 	</span>
 </div>
 
-<p i18n:translate="">This page offers the tabular format of the map locations, as resulted from the search filters applied on the map:</p>
+<p i18n:translate="">This page offers the tabular format of the map locations, as resulted from the search filters applied on the map.</p>
 
 <noscript>
 	<form action="downloadLocationsKml" method="post">
@@ -81,109 +95,115 @@
 </div>
 
 <input type="hidden" name="type" value="geo" />
-<table metal:define-macro="main" width="100%" class="datatable">
-	<thead>
-		<tr>
-			<th scope="col" class="scope-col" i18n:translate="">Type</th>
-			<tal:block tal:condition="python:sort_on=='title'">
-				<tal:block tal:condition="python:sort_order==''">
-					<th scope="col" class="scope-col">
-						<a id="title" tal:attributes="href string:${request/ACTUAL_URL}${url_params}&amp;first_letter=${first_letter}&amp;sort_on=title&amp;sort_order=reverse#title">
-							<span i18n:translate="">Title</span>
-						</a>
-					</th>
-				</tal:block>
-				<tal:block tal:condition="python:sort_order=='reverse'">
-					<th scope="col" class="scope-col">
-						<a id="title" tal:attributes="href string:${request/ACTUAL_URL}${url_params}&amp;first_letter=${first_letter}&amp;sort_on=title#title">
-							<span i18n:translate="">Title</span>
-						</a>
-					</th>
-				</tal:block>
-			</tal:block>
-			<tal:block tal:condition="python:sort_on!='title'">
-				<th scope="col" class="scope-col">
-					<a tal:omit-tag="not: sortable" id="title" tal:attributes="href string:${request/ACTUAL_URL}${url_params}&amp;first_letter=${first_letter}&amp;sort_on=title#title" i18n:translate="">Title</a>
-				</th>
-			</tal:block>
-			<tal:block tal:condition="python:sort_on=='geo_address'">
-				<tal:block tal:condition="python:sort_order==''">
-					<th scope="col" class="scope-col">
-						<a id="geo_address" tal:attributes="href string:${request/ACTUAL_URL}${url_params}&amp;first_letter=${first_letter}&amp;sort_on=geo_address&amp;sort_order=reverse#geo_address">
-							<span i18n:translate="">Address</span>
-						</a>
-					</th>
-				</tal:block>
-				<tal:block tal:condition="python:sort_order=='reverse'">
-					<th scope="col" class="scope-col">
-						<a id="geo_address" tal:attributes="href string:${request/ACTUAL_URL}${url_params}&amp;first_letter=${first_letter}&amp;sort_on=geo_address#geo_address">
-							<span i18n:translate="">Address</span>
-						</a>
-					</th>
-				</tal:block>
-			</tal:block>
-			<tal:block tal:condition="python:sort_on!='geo_address'">
-				<th scope="col" class="scope-col">
-					<a tal:omit-tag="not: sortable" id="geo_address" tal:attributes="href string:${request/ACTUAL_URL}${url_params}&amp;first_letter=${first_letter}&amp;sort_on=geo_address#geo_address" i18n:translate="">Address</a>
-				</th>
-			</tal:block>
-			<th scope="col" class="scope-col">
-				<span i18n:translate="">Latitude/Longitude</span>
-			</th>
-			<tal:block tal:condition="python:sort_on=='coverage'">
-				<tal:block tal:condition="python:sort_order==''">
-					<th scope="col" class="scope-col">
-						<a id="coverage" tal:attributes="href string:${request/ACTUAL_URL}${url_params}&amp;first_letter=${first_letter}&amp;sort_on=coverage&amp;sort_order=reverse">
-							<span i18n:translate="">Country</span>
-						</a>
-					</th>
-				</tal:block>
-				<tal:block tal:condition="python:sort_order=='reverse'">
-					<th scope="col" class="scope-col">
-						<a id="coverage" tal:attributes="href string:${request/ACTUAL_URL}${url_params}&amp;first_letter=${first_letter}&amp;sort_on=coverage">
-							<span i18n:translate="">Country</span>
-						</a>
-					</th>
-				</tal:block>
-			</tal:block>
-			<tal:block tal:condition="python:sort_on!='coverage'">
-				<th scope="col" class="scope-col">
-					<a tal:omit-tag="not: sortable" id="coverage"
-					tal:attributes="href string:${request/ACTUAL_URL}${url_params}&amp;first_letter=${first_letter}&amp;sort_on=coverage" i18n:translate="">Country</a>
-				</th>
-			</tal:block>
-			<th tal:condition="ratable_records" scope="col" class="scope-col" i18n:translate="">Rating</th>
-		</tr>
-	</thead>
-	<tbody>
-		<tr tal:condition="not:records">
-			<td colspan="7" i18n:translate="">No locations found</td>
-		</tr>
-		<tr tal:repeat="record records" tal:condition="records">
-			<tal:block define="has_view record/title_or_id"
-				on-error="structure string:<td colspan='6'></strong>Access to <a href='${record/absolute_url}'>${record/getId}</a> is restricted</strong></td>">
-			<td>
-				<img tal:attributes="src string:getSymbolPicture?id=${record/geo_type};
-									 alt python:here.getSymbolTitle(record.geo_type);
-									 title python:here.getSymbolTitle(record.geo_type);" />
-			</td>
-			<td><a tal:attributes="href string:${record/absolute_url}" tal:content="record/title_or_id" /></td>
-			<td tal:content="record/geo_location/address" />
-			<td tal:define="lat record/geo_location/lat;
-							lon record/geo_location/lon;
-							latitude python:'%2.6f' % lat;
-							longitude python:'%2.6f' % lon;"
-				tal:content="string:${latitude}/${longitude}" />
-			<td tal:condition="record/coverage" tal:content="record/coverage" />
-			<td tal:condition="not:record/coverage" tal:content="string:---" />
-			<td tal:condition="ratable_records" class="type" style="width: 15%;">
-				<tal:block define="user_rating record/user_rating_stars_numbers|nothing"
-					condition="record/is_ratable" replace="structure user_rating"/>
-			</td>
-			</tal:block>
-		</tr>
-	</tbody>
-</table> 
+<form method="post" action="." name="objectItems">
+  <table id="folderfile_list" metal:define-macro="main" width="100%" class="datatable">
+    <thead>
+      <tr>
+        <th class="checkbox" i18n:translate=""><input class="select-all" type="checkbox" /></th>
+        <th scope="col" class="scope-col" i18n:translate="">Type</th>
+        <tal:block tal:condition="python:sort_on=='title'">
+          <tal:block tal:condition="python:sort_order==''">
+            <th scope="col" class="scope-col">
+              <a id="title" tal:attributes="href string:${request/ACTUAL_URL}${url_params}&amp;first_letter=${first_letter}&amp;sort_on=title&amp;sort_order=reverse#title">
+                <span i18n:translate="">Title</span>
+              </a>
+            </th>
+          </tal:block>
+          <tal:block tal:condition="python:sort_order=='reverse'">
+            <th scope="col" class="scope-col">
+              <a id="title" tal:attributes="href string:${request/ACTUAL_URL}${url_params}&amp;first_letter=${first_letter}&amp;sort_on=title#title">
+                <span i18n:translate="">Title</span>
+              </a>
+            </th>
+          </tal:block>
+        </tal:block>
+        <tal:block tal:condition="python:sort_on!='title'">
+          <th scope="col" class="scope-col">
+            <a tal:omit-tag="not: sortable" id="title" tal:attributes="href string:${request/ACTUAL_URL}${url_params}&amp;first_letter=${first_letter}&amp;sort_on=title#title" i18n:translate="">Title</a>
+          </th>
+        </tal:block>
+        <tal:block tal:condition="python:sort_on=='geo_address'">
+          <tal:block tal:condition="python:sort_order==''">
+            <th scope="col" class="scope-col">
+              <a id="geo_address" tal:attributes="href string:${request/ACTUAL_URL}${url_params}&amp;first_letter=${first_letter}&amp;sort_on=geo_address&amp;sort_order=reverse#geo_address">
+                <span i18n:translate="">Address</span>
+              </a>
+            </th>
+          </tal:block>
+          <tal:block tal:condition="python:sort_order=='reverse'">
+            <th scope="col" class="scope-col">
+              <a id="geo_address" tal:attributes="href string:${request/ACTUAL_URL}${url_params}&amp;first_letter=${first_letter}&amp;sort_on=geo_address#geo_address">
+                <span i18n:translate="">Address</span>
+              </a>
+            </th>
+          </tal:block>
+        </tal:block>
+        <tal:block tal:condition="python:sort_on!='geo_address'">
+          <th scope="col" class="scope-col">
+            <a tal:omit-tag="not: sortable" id="geo_address" tal:attributes="href string:${request/ACTUAL_URL}${url_params}&amp;first_letter=${first_letter}&amp;sort_on=geo_address#geo_address" i18n:translate="">Address</a>
+          </th>
+        </tal:block>
+        <th scope="col" class="scope-col">
+          <span i18n:translate="">Latitude/Longitude</span>
+        </th>
+        <tal:block tal:condition="python:sort_on=='coverage'">
+          <tal:block tal:condition="python:sort_order==''">
+            <th scope="col" class="scope-col">
+              <a id="coverage" tal:attributes="href string:${request/ACTUAL_URL}${url_params}&amp;first_letter=${first_letter}&amp;sort_on=coverage&amp;sort_order=reverse">
+                <span i18n:translate="">Country</span>
+              </a>
+            </th>
+          </tal:block>
+          <tal:block tal:condition="python:sort_order=='reverse'">
+            <th scope="col" class="scope-col">
+              <a id="coverage" tal:attributes="href string:${request/ACTUAL_URL}${url_params}&amp;first_letter=${first_letter}&amp;sort_on=coverage">
+                <span i18n:translate="">Country</span>
+              </a>
+            </th>
+          </tal:block>
+        </tal:block>
+        <tal:block tal:condition="python:sort_on!='coverage'">
+          <th scope="col" class="scope-col">
+            <a tal:omit-tag="not: sortable" id="coverage"
+            tal:attributes="href string:${request/ACTUAL_URL}${url_params}&amp;first_letter=${first_letter}&amp;sort_on=coverage" i18n:translate="">Country</a>
+          </th>
+        </tal:block>
+        <th tal:condition="ratable_records" scope="col" class="scope-col" i18n:translate="">Rating</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr tal:condition="not:records">
+        <td colspan="7" i18n:translate="">No locations found</td>
+      </tr>
+      <tr tal:repeat="record records" tal:condition="records">
+        <tal:block define="has_view record/title_or_id"
+          on-error="structure string:<td colspan='6'></strong>Access to <a href='${record/absolute_url}'>${record/getId}</a> is restricted</strong></td>">
+        <td class="checkbox">
+          <input type="checkbox" tal:attributes="value python:here.rstk['path_in_site'](record)" name="id">
+        </td>
+        <td>
+          <img tal:attributes="src string:getSymbolPicture?id=${record/geo_type};
+                     alt python:here.getSymbolTitle(record.geo_type);
+                     title python:here.getSymbolTitle(record.geo_type);" />
+        </td>
+        <td><a tal:attributes="href string:${record/absolute_url}" tal:content="record/title_or_id" /></td>
+        <td tal:content="record/geo_location/address" />
+        <td tal:define="lat record/geo_location/lat;
+                lon record/geo_location/lon;
+                latitude python:'%2.6f' % lat;
+                longitude python:'%2.6f' % lon;"
+          tal:content="string:${latitude}/${longitude}" />
+        <td tal:condition="record/coverage" tal:content="record/coverage" />
+        <td tal:condition="not:record/coverage" tal:content="string:---" />
+        <td tal:condition="ratable_records" class="type" style="width: 15%;">
+          <tal:block define="user_rating record/user_rating_stars_numbers|nothing"
+            condition="record/is_ratable" replace="structure user_rating"/>
+        </td>
+        </tal:block>
+      </tr>
+    </tbody>
+  </table> 
+</form>
 
 </tal:block>
 

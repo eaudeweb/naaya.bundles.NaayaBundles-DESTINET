@@ -106,7 +106,7 @@
             <th i18n:translate="">Mobile</th>
             <td tal:content="here/cellphone">cellphone</td>
         </tr>
-        <tr tal:condition="here/email | nothing">
+        <tr tal:condition="python:here.email and here.checkPermissionEditObject()" >
             <th i18n:translate="">Email</th>
             <td>
                 <a tal:attributes="href string:mailto:${here/email}"
@@ -133,6 +133,10 @@
         <tr tal:condition="here/coverage | nothing">
             <th i18n:translate="">Country</th>
             <td tal:content="here/coverage" />
+        </tr>
+        <tr tal:condition="python: here.keywords and (not here.checkPermissionEditObject())">
+            <th i18n:translate="">Keywords</th>
+            <td tal:content="here/keywords" />
         </tr>
         <!-- <tr tal:define="title python:portal_map.getSymbolTitle(here.geo_type); -->
         <!--     picture python:portal_map.getSymbolPicture(here.geo_type)" -->

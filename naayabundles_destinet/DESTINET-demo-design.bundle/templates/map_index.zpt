@@ -52,7 +52,7 @@
 			view them in Google Earth</a>,
 			<a href="." id="download_georss" i18n:name="GeoRSS" i18n:translate="">
 			download them in GeoRSS format</a> or <a href="." id="download_contacts_csv"
-			i18n:name="CSV" i18n:translate="">download contacts in CSV format</a>.</tal:block>
+			i18n:name="CSV" i18n:translate="">download contacts in XLS format</a>.</tal:block>
 			Currently displaying <strong id="record_counter" i18n:name="counter"></strong>
 			location(s).
 			<br i18n:name="br"/><br i18n:name="br"/>

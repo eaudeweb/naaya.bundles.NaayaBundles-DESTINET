@@ -401,6 +401,8 @@ function notify_contacts_csv(bounds, query, enc_form) {
             "&geo_query=" + query;
 
         $('#download_contacts_csv').attr('href',
+            "./export_csv" + req_link + "&meta_type=Naaya Contact" + "&file_type=csv");
+        $('#download_contacts_xls').attr('href',
             "./export_csv" + req_link + "&meta_type=Naaya Contact");
     }
 }

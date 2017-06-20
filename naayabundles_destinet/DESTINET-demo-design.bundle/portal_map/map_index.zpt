@@ -49,10 +49,11 @@
 			<a href="." id="view_as_list" i18n:name="view_list" i18n:translate="">
 			view selected locations as a list</a> (A-Z or by country),
 			<a href="." id="view_in_google_earth" i18n:name="view_g_earth" i18n:translate="">
-			view them in Google Earth</a>,
+			view them in Google Earth</a>, or download them in 
 			<a href="." id="download_georss" i18n:name="GeoRSS" i18n:translate="">
-			download them in GeoRSS format</a> or <a href="." id="download_contacts_csv"
-			i18n:name="CSV" i18n:translate="">download contacts in XLS format</a>.</tal:block>
+			GeoRSS</a>, <a href="." id="download_contacts_xls"
+			i18n:name="XLS" i18n:translate="">XLS</a> or <a href="." id="download_contacts_csv"
+			i18n:name="CSV" i18n:translate="">CSV</a> format.</tal:block>
 			Currently displaying <strong id="record_counter" i18n:name="counter"></strong>
 			location(s).
 			<br i18n:name="br"/><br i18n:name="br"/>

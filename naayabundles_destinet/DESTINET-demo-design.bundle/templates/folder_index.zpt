@@ -145,7 +145,7 @@
      class="content-header clearfix">
   <div  class="content-left"
         tal:condition="python:here.getLocalProperty('intro')"
-        tal:attributes="style python:test(logo,None,'width:100%')" 
+        tal:attributes="style python:test(logo,None,'width:100%')"
         tal:content="structure python:here.getLocalProperty('intro')" />
   <div tal:condition="logo" tal:attributes="style python:test(here.getLocalProperty('intro'),None,'width:100%')"
         class="content-right">
@@ -155,7 +155,8 @@
 </div>
 <p tal:condition="python:here.description!=''" tal:content="structure here/description" />
 
-<div tal:condition="python:request.AUTHENTICATED_USER.has_role(['Manager', 'Administrator', 'Section Admin'], here)">
+<!--<div tal:condition="python:request.AUTHENTICATED_USER.has_role(['Manager', 'Administrator', 'Section Admin'], here)">-->
+<div>
 <metal:block use-macro="python:here.getFormsTool().getForm('folder_listing').macros['listing']">
     <metal:block fill-slot="menu_extension">
         <span tal:replace="structure here/menusubmissions" />

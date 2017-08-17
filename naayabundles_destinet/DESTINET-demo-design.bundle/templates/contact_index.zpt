@@ -4,7 +4,6 @@
     </metal:block>
 
     <metal:block fill-slot="head">
->
         <tal:block define="description here/description; content python:here.html2text(description)">
             <meta tal:condition="content" tal:attributes="content content" name="description" />
         </tal:block>

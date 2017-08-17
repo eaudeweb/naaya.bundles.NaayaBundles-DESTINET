@@ -156,7 +156,7 @@
 <p tal:condition="python:here.description!=''" tal:content="structure here/description" />
 
 <!--<div tal:condition="python:request.AUTHENTICATED_USER.has_role(['Manager', 'Administrator', 'Section Admin'], here)">-->
-<div>
+<div tal:condition="here/checkPermissionAddObjects">
 <metal:block use-macro="python:here.getFormsTool().getForm('folder_listing').macros['listing']">
     <metal:block fill-slot="menu_extension">
         <span tal:replace="structure here/menusubmissions" />
@@ -170,7 +170,7 @@
 </metal:block>
 </div>
 
-</div>
+<!--<div>-->
 
 <metal:block metal:define-slot="folder_footer">
 <div id="folder_footer" class="folder_footer">

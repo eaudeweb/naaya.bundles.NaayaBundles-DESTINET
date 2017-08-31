@@ -105,7 +105,7 @@
             <th i18n:translate="">Mobile</th>
             <td tal:content="here/cellphone">cellphone</td>
         </tr>
-        <tr tal:condition="python:here.email and here.checkPermissionEditObject()" >
+        <tr tal:condition="python:getattr(here, 'email', None) and here.checkPermissionEditObject()" >
             <th i18n:translate="">Email</th>
             <td>
                 <a tal:attributes="href string:mailto:${here/email}"

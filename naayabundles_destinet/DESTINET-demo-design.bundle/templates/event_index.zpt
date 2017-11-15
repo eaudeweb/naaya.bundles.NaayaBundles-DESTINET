@@ -54,8 +54,8 @@
 	<tal:block content="structure python:here.portal_map.render_object_map(here.geo_location)"/>
 
 	<p tal:condition="python:here.description!=''" tal:content="structure here/description" />
-
-	<table border="0" cellspacing="2" cellpadding="2" tal:define="portal_map here/getGeoMapTool;">
+        <div class="table-responsive-vertical">
+	<table class="vertical-table" tal:define="portal_map here/getGeoMapTool;">
 	<tr tal:condition="here/start_date">
 		<th i18n:translate="">Period</th>
 		<td>
@@ -136,7 +136,7 @@
 	</tr>
 
 	</table>
-
+       </div>
 	<p tal:define="details python:here.prop_value_or_none('details')"
 		tal:condition="details" tal:content="structure details" />
 

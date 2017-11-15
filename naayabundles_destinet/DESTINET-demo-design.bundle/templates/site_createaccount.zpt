@@ -38,7 +38,7 @@ My role and interest in sustainable and responsible tourism is ..
         tal:condition="not:widgets" tal:on-error="string: window.location = '${site/absolute_url}/create_destinet_account_html';">
 </script>
 
-<h1 i18n:translate="">DestiNet account application</h1>
+<h1 i18n:translate="">Tourism 2030 account application</h1>
 
 <p i18n:translate="">
 Registration here will link you into a global responsible and sustainable tourism knowledge

@@ -1,0 +1,133 @@
+.calendar-box {
+	display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+#calendar a, #calendar a:visited, #calendar a:hover, #calendar a:link{
+	color: #FFFFFF;
+	text-decoration: none;
+}
+
+#calendar {
+    width: 100%;
+    max-width: 258px;
+    padding: 0;
+    margin: 0;
+    border-bottom: 4px solid #0070bb;
+    font-size: 0.8em;
+    font-weight: normal;
+    color: #616B76;
+    text-align: center;
+    background-color: #fff;
+}
+
+.nav, .nav a:link, .nav a:visited, .nav a:active {
+	font-size: 1.4em;
+	font-weight: normal;
+	color: #fff;
+	text-align: center;
+	text-decoration: none;
+	margin: 0 0.5em;
+}
+
+.nav.previous-month, .nav.next-month {
+  padding: 2px 5px;
+}
+
+.nav.previous-month:hover, .nav.next-month:hover {
+  background-color: #FFFFFF !important;
+  color: #000000 !important;
+  height: 100%;
+}
+
+#calendar caption {
+    margin: 0.1em 0 0 0;
+    padding: 1.3rem;
+    background-color: #0071bc;
+    font-size: 1.1em;
+    line-height: 1.1em;
+    font-weight: normal;
+    text-align: center;
+    border-bottom: none !important;
+    border-top-left-radius: 1rem;
+    border-top-right-radius: 1rem;
+}
+
+#calendar th {
+    font-size: 1.5rem;
+    font-weight: bold;
+    color: #ffffff;
+    background: #FAFAF9;
+    border-bottom: 1px solid #0071bc;
+    background: #0070bb;
+}
+
+#calendar td.today a {
+	margin: 0pt;
+	padding: 0pt;
+}
+
+#calendar td {
+    height: 1.8em;
+    text-align: center;
+    background-color: #ffffff;
+    color: #0071bc;
+    margin: 0pt;
+    padding: 0pt;
+    font-size: 1.4rem;
+    font-weight: bold;
+    border: 1px solid #eee;
+}
+
+#calendar td a {
+	margin: 0pt;
+	padding: 0pt;
+	font-weight: bold;
+	display: block;
+	background-color: #F5F5F5;
+	height: 1.5em;
+	color: #2a6495;
+  text-align: center;
+}
+
+caption .nav.previous-month {
+	float: left;
+    font-size: 3rem;
+}
+
+caption .current-month {
+    font-size: 1.6rem;
+}
+
+caption .nav.next-month {
+    float: right;
+    font-size: 3rem;
+}
+
+#calendar tbody {
+	box-shadow: 0px 3px 14px #2d2d2d;
+    border-left: 1px solid #0070bb;
+    border-right: 1px solid #0070bb;
+}
+
+#calendar td.today a, #calendar td.today {
+	background-color: #cacaca;
+}
+
+#calendar td a, #calendar td a:link, #calendar td a:visited {
+	color: #00520E;
+}
+
+#calendar td a, #calendar td a:hover, #calendar td a:active {
+	color: #00520E;
+}
+
+#calendar td a:hover {
+  background-color: #DFDFDF;
+}
+
+.calendar_box {
+	width: 20%;
+	float: right;
+}

@@ -290,7 +290,7 @@ function fRenameObjects()
                     </tal:block>
                 </tr>
                 <tr tal:condition="not: python:test(list_expired, True, upcoming_events)">
-                        <td colspan="3">
+                        <td colspan="6">
                             <strong i18n:translate="">There are no upcoming events</strong>
                         </td>
                 </tr>

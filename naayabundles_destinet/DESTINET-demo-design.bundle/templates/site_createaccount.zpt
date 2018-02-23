@@ -116,9 +116,8 @@ tourism stakeholders - later you can complete your full profile to save time now
           </div>
 
           <div>
-              <input type="submit" id="submit-request"
-                  value="Submit request"
-                  i18n:attributes="value" />
+              <button style="margin: 14px" type="submit" id="submit-request" class="btn btn-primary"
+                  value="Submit request" i18n:translate="">Submit</button>
           </div>
       </div>
 </form>

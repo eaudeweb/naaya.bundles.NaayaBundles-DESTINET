@@ -35,7 +35,7 @@
     </metal:block>
 
     <metal:block tal:define="is_ratable here/is_ratable" fill-slot="body">
-        <div class="content-index-page" id="center_content">
+        <div class="content-index-page contact-page" id="center_content">
         <h1><img tal:attributes="src python:test(here.approved, here.icon, here.icon_marked); title here/get_meta_label; alt here/get_meta_label" border="0" /> <span tal:replace="here/title_or_id" />
                 <tal:block condition="is_ratable" replace="structure here/user_rating_view|nothing"/>
                 <!--<span class="available_langs" tal:condition="python:here.item_has_title(here, here.title)">
@@ -58,13 +58,13 @@
                 <span i18n:translate="">Assign local editor role</span></a>
         </div>
         </tal:block>
+        <p tal:condition="python:here.description!=''" tal:content="structure here/description" />
 
         <!-- Map widget -->
         <tal:block content="structure python:here.portal_map.render_object_map(here.geo_location)"/>
 
-        <p tal:condition="python:here.description!=''" tal:content="structure here/description" />
 
-        <table border="0" cellspacing="2" cellpadding="2" tal:define="portal_map here/getGeoMapTool;">
+        <table class="contact-table" border="0" cellspacing="2" cellpadding="2" tal:define="portal_map here/getGeoMapTool;">
         <tr tal:condition="here/personaltitle | nothing">
             <th i18n:translate="">Personal Title</th>
             <td tal:content="here/personaltitle">personaltitle</td>

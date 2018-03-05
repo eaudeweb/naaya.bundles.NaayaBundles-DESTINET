@@ -2,6 +2,9 @@
 <metal:block fill-slot="body">
 
 <script type="text/javascript" src="++resource++destinet.keywords/keywords.js"></script>
+<script type="text/javascript" src="/++resource++Products.Naaya/lib/datatables/jquery.dataTables.min.js"></script>
+<script type="text/javascript" src="http://cdn.datatables.net/plug-ins/1.10.16/sorting/diacritics-sort.js"></script>
+<link rel="stylesheet" type="text/css" href="/++resource++Products.Naaya/lib/datatables/jquery.dataTables.css" />
 
 <script type="text/javascript">
 $(document).ready(function(){
@@ -13,6 +16,12 @@ $(document).ready(function(){
 			$(this).toggleClass('clicked');
 		}
 		$('#folderfile_list td.checkbox input[type=checkbox]').attr('checked', !checked);
+	});
+	$('.datatable').DataTable({
+		'aaSorting': [[0, "desc"]],
+		'sPaginationType': 'full_numbers',
+		"pageLength": 25,
+		"lengthMenu": [ [10, 15, 25, 50, 100, -1], [10, 15, 25, 50, 100, "All"] ]
 	});
 })
 </script>
@@ -72,23 +81,6 @@ $(document).ready(function(){
 	</form>
 </noscript>
 	<strong tal:content="python:results"/> <span i18n:translate="">locations found.</span>
-	<a tal:attributes="href string:${request/ACTUAL_URL}${url_params}&amp;start=${prev_start}&amp;end=${prev_end}&amp;step=${step}&amp;sort_on=${sort_on}&amp;sort_order=${sort_order}&amp;first_letter=${first_letter}"
-		tal:condition="python:prev_start >= 0">
-		<< <span i18n:translate="">Prev</span> <span tal:replace="step"/></a>
-	<tal:block condition="python:results > step">
-		<span i18n:translate="">Displaying</span> <strong><span tal:replace="start"/> - <span tal:replace="end"/></strong>
-	</tal:block>
-	<a tal:attributes="href string:${request/ACTUAL_URL}${url_params}&amp;start=${next_start}&amp;end=${next_end}&amp;step=${step}&amp;sort_on=${sort_on}&amp;sort_order=${sort_order}&amp;first_letter=${first_letter}"
-		tal:condition="python:results > next_start">
-		<span i18n:translate="">Next</span> <span tal:replace="python:test(step<next_end-next_start, step, next_end-next_start)"/> >>
-	</a>
-	<tal:block tal:condition="here/can_filter_by_first_letter">
-		<br />
-		<a tal:attributes="href string:${request/ACTUAL_URL}${url_params}" i18n:translate="">List all</a>
-		<tal:block tal:repeat="letter python:'ABCDEFGHIJKLMNOPQRSTUVWXYZ'">
-			<a tal:attributes="href string:${request/ACTUAL_URL}${url_params}&amp;first_letter=${letter}" i18n:translate="" tal:content="letter"/>
-		</tal:block>
-	</tal:block>
 
 <div id="toolbar" tal:condition="here/checkPermissionPublishObjects">
 	<a href="javascript:fAllocateKeywords();" title="Allocate keywords" i18n:attributes="title"><span i18n:translate="">Allocate keywords for selected items</span></a>

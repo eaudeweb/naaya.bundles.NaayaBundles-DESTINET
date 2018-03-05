@@ -124,6 +124,26 @@ function fRenameObjects()
         [Restricted access]
     </tal:block>
 </h1>
+
+<tal:block define="objects_info here/checkPermissionManageObjects;
+    folders_list python:objects_info[6];
+    objects_list python:objects_info[7];
+    logo here/getFolderLogo;">
+
+<div tal:attributes="style python:test(here.getLocalProperty('intro'),None,'border: none')"
+     class="content-header clearfix">
+  <div  class="content-left"
+        tal:condition="python:here.getLocalProperty('intro')"
+        tal:attributes="style python:test(logo,None,'width:100%')"
+        tal:content="structure python:here.getLocalProperty('intro')" />
+  <div tal:condition="logo" tal:attributes="style python:test(here.getLocalProperty('intro'),None,'width:100%')"
+        class="content-right">
+    <img tal:attributes="src logo/absolute_url"
+        alt="Folder logo" i18n:attributes="alt" />
+  </div>
+</div>
+</tal:block>
+
 <p tal:condition="python:here.description!=''" tal:content="structure here/description" />
 
 <tal:block tal:define="this_absolute_url python:here.absolute_url(0);
@@ -148,7 +168,7 @@ function fRenameObjects()
 </tal:block>
 
 <div tal:condition="python:btn_select or btn_delete or btn_copy or btn_cut or btn_paste">
-    <div id="toolbar">
+    <div class="news-toolbar" id="toolbar">
         <tal:block tal:condition="btn_select"><a href="javascript:toggleSelect();"><span i18n:translate="">Select all</span></a></tal:block>
         <tal:block tal:condition="btn_copy"><a href="javascript:fCopyObjects();"><span i18n:translate="">Copy</span></a></tal:block>
         <tal:block tal:condition="btn_cut"><a href="javascript:fCutObjects();"><span i18n:translate="">Cut</span></a></tal:block>
@@ -159,34 +179,41 @@ function fRenameObjects()
 </div>
 
 <form name="objectItems" method="post" action="">
-<table border="0" cellspacing="0" cellpadding="2" border="4">
-       <tr>
+<table class="news-page" border="0" cellspacing="0" cellpadding="2" border="4">
+       <tr style="display: none">
          <th>&nbsp;</th>
+         <th i18n:translate="">Picture</th>
          <th i18n:translate="">Released</th>
          <th i18n:translate="">Title</th>
+         <th i18n:translate="">Description</th>
          <!--<th>Author/Source</th>-->
-         <th i18n:translate="" >On top</th>
-         <th i18n:translate="" >Edit</th>
+         <th i18n:translate="" tal:condition="here/checkPermissionEditObject">On top</th>
+         <th i18n:translate="" tal:condition="here/checkPermissionEditObject">Edit</th>
        </tr>
 
-	<tr tal:repeat="item python:here.getAllAnnouncements()">
+	<tr class="clearfix" tal:repeat="item python:here.getAllAnnouncements()">
 		<tal:block define="del_permission python:item.checkPermissionDeleteObject()">
-			<td tal:condition="python:del_permission==1" width="4%" valign="top"><input type="checkbox" name="id" tal:attributes="value item/id"></td>
+			<td class="news-checkbox" tal:condition="python:del_permission==1" width="4%" valign="top">
+				<input type="checkbox" name="id" tal:attributes="value item/id; id item/id">
+				<label tal:attributes="for item/id"></label>
+			</td>
 			<td tal:condition="python:del_permission!=1" width="4%" valign="top"></td>
 		</tal:block> 
-		<td tal:content="python:here.utShowDateTime(item.releasedate)" align="center" nowrap="nowrap">Release date</td>
-		<td><a tal:attributes="href item/absolute_url" tal:content="item/title_or_id">Title and description</a></td>
+      	<td class="news-image"><img tal:attributes="src string:${item/absolute_url}/getSmallPicture; alt item/title_or_id" /></td>
+		<td class="news-date" tal:content="python:here.utShowDateTime(item.releasedate)" align="center" nowrap="nowrap">Release date</td>
+		<td class="news-title"><a tal:attributes="href item/absolute_url" tal:content="item/title_or_id">Title and description</a></td>
+        <td class="news-description"><p tal:content="python:here.html2text(item.description, 100, True)"></p></td>
 		<td class="onfront" tal:condition="item/checkPermissionEditObject">
 			<a tal:condition="item/topitem"
 				tal:attributes="href string:${item/absolute_url}/change_topitem_status" i18n:attributes="title" title="Click to hide news item from the front page">
-				<img src="misc_/Naaya/yes.gif" alt="Click to hide news item from the front page" i18n:attributes="alt" />
+				On front <img src="misc_/Naaya/yes.gif" alt="Click to hide news item from the front page" i18n:attributes="alt" />
 			</a>
 			<a tal:condition="not: item/topitem"
 				tal:attributes="href string:${item/absolute_url}/change_topitem_status" i18n:attributes="title" title="Click to show news item on the front page">
-				<img src="misc_/Naaya/no.gif" alt="Click to show news item on the front page" i18n:attributes="alt" />
+				On front <img src="misc_/Naaya/no.gif" alt="Click to show news item on the front page" i18n:attributes="alt" />
 			</a>
 		</td>
-		<td><a tal:condition="python:item.checkPermissionEditObject()==1" tal:attributes="href string:${item/absolute_url}/edit_html"><img tal:attributes="src python:test(item.approved, item.icon, item.icon_marked)" alt="Edit" border="0"></a></td>
+		<td class="edit-section" tal:condition="python:item.checkPermissionEditObject()==1"><a tal:attributes="href string:${item/absolute_url}/edit_html">Edit <img tal:attributes="src python:test(item.approved, item.icon, item.icon_marked)" alt="Edit" border="0"></a></td>
 <!--                <td align="left" nowrap="nowrap" tal:content="item/source">Source</td>-->
 	</tr>
 

@@ -151,9 +151,26 @@ function fRenameObjects()
 		</span>
 	</span>
 </h1>
-<img tal:condition="logo"
-     tal:attributes="src logo/absolute_url"
-     alt="Folder logo" i18n:attributes="alt" />
+
+<tal:block define="objects_info here/checkPermissionManageObjects;
+    folders_list python:objects_info[6];
+    objects_list python:objects_info[7];
+    logo here/getFolderLogo;">
+
+<div tal:attributes="style python:test(here.getLocalProperty('intro'),None,'border: none')"
+     class="content-header clearfix">
+  <div  class="content-left"
+        tal:condition="python:here.getLocalProperty('intro')"
+        tal:attributes="style python:test(logo,None,'width:100%')"
+        tal:content="structure python:here.getLocalProperty('intro')" />
+  <div tal:condition="logo" tal:attributes="style python:test(here.getLocalProperty('intro'),None,'width:100%')"
+        class="content-right">
+    <img tal:attributes="src logo/absolute_url"
+        alt="Folder logo" i18n:attributes="alt" />
+  </div>
+</div>
+</tal:block>
+
 <p tal:condition="python:here.description!=''"
    tal:content="structure here/description"></p>
   <tal:block tal:define="this_absolute_url python:here.absolute_url(0);

@@ -1,0 +1,8 @@
+<metal:block use-macro="here/widget_macro/macros/widget">
+    <metal:block fill-slot="input">
+        <select name="geo_type:utf8:ustring" id="prop_id">
+            <option i18n:translate="" value="symbol998"
+            selected="selected">Certificate</option>
+        </select>
+    </metal:block>
+</metal:block>

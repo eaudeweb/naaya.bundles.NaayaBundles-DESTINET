@@ -1,6 +1,327 @@
 <metal:block use-macro="here/standard_template_macro">
 <metal:block fill-slot="body">
 <div id="loginlogout-page">
+
+<style type="text/css">
+#loginlogout-page {
+  position: relative;
+}
+#login-form {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+}  
+
+#signin * {
+  box-sizing: content-box;
+}
+
+#signin {
+  box-sizing: content-box;
+}
+
+#signin, #new-user {
+    width: 300px;
+    background: #0071bc;
+    margin:50px;
+    margin-bottom: 100px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+    padding: 30px;
+    position: relative;
+    border-radius: 1rem;
+    height: 312px;
+    padding-bottom: 106px;
+}
+
+#new-user {
+  display: none;
+    position: absolute;
+    overflow: hidden;
+    top: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    margin: 0;
+    box-sizing: content-box;
+    margin-top: 50px;
+}
+
+#new-user p {
+    color: white;
+
+}
+
+#new-user a {
+  color: white;
+  font-weight: bold;
+}
+
+#signin .form-title,
+#new-user .form-title {
+  font: 500 16px/1 "Roboto", sans-serif;
+  color: #ebebeb;
+  text-align: center;
+  margin: 35px 0;
+}
+
+#signin .input-field {
+  position: relative;
+  height: 50px;
+  margin: 35px 0;
+  transition: all 300ms;
+}
+#signin .input-field i {
+  position: absolute;
+  bottom: 23px;
+  left: 15px;
+  color: #bbbbbb;
+  height: 0;
+  visibility: hidden;
+  font-size: 0;
+  transition: all 100ms;
+}
+#signin .input-field label {
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  margin-top: 20px;
+  left: 4px;
+  font: 400 16px/1 "Roboto", sans-serif;
+  color: #fff;
+  opacity: 1;
+  transition: all 300ms;
+}
+#signin .input-field input {
+  width: calc(100% - 70px);
+  height: 4px;
+  font: 500 16px/1 "Roboto", sans-serif;
+  padding: 0 20px 0 50px;
+  border: none;
+  box-shadow: 0 10px 10px rgba(0, 0, 0, 0.25);
+  color: #606060;
+  border-radius: 6px;
+  outline: 0;
+  overflow: hidden;
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  transition: all 300ms;
+}
+
+#signin .forgot-pw {
+  font: 600 14px/1 "Roboto", sans-serif;
+  color: #2e3c89;
+  text-decoration: none;
+  float: right;
+  margin: 0 0 25px 0;
+  display: block;
+}
+#signin button.login,
+#new-user .create-account {
+  min-height: 60px;
+  font: 500 16px/1 "Roboto", sans-serif;
+  width: 100%;
+  padding: 0;
+  display: block;
+  background: #324192;
+  color: #fff;
+  border: none;
+  outline: 0;
+  cursor: pointer;
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  border-bottom-left-radius: 1rem;
+  border-bottom-right-radius: 1rem;
+}
+
+#new-user .create-account {
+  display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+#signin .check {
+  width: 100%;
+  height: 100%;
+  background: #324192;
+  position: absolute;
+  top: 100%;
+  left: 0;
+  text-align: center;
+  visibility: hidden;
+  transition: all 1s;
+}
+#signin .check.in {
+  visibility: visible;
+  top: 0;
+}
+#signin .check i {
+  color: #fff;
+  font-size: 64px;
+  line-height: 7.4;
+}
+
+#signin .input-field input:focus {
+  color: #333;
+}
+
+#signin .input-field input:focus,
+#signin .input-field input.not-empty{
+  height: auto;
+  padding: 14px 20px 14px 50px;
+}
+#signin .input-field input:focus + i,
+#signin .input-field input.not-empty + i{
+  font-size: 24px;
+  bottom: 28px;
+  height: 10px;
+  visibility: visible;
+}
+#signin .input-field input:focus + i + label,
+#signin .input-field input.not-empty + i + label {
+  font-size: 12px;
+  margin-top: -15px;
+  opacity: 0.7;
+  animation: label 300ms 1;
+}
+
+#signin .input-field input:focus,
+#signin .input-field input.not-empty,
+#signin .input-field input:-webkit-autofill {
+  height: auto;
+  padding: 14px 20px 14px 50px;
+}
+#signin .input-field input:focus + i,
+#signin .input-field input.not-empty + i,
+#signin .input-field input:-webkit-autofill + i {
+  font-size: 24px;
+  bottom: 28px;
+  height: 10px;
+  visibility: visible;
+}
+#signin .input-field input:focus + i + label,
+#signin .input-field input.not-empty + i + label,
+#signin .input-field input:-webkit-autofill + i + label {
+  font-size: 12px;
+  margin-top: -15px;
+  opacity: 0.7;
+  animation: label 300ms 1;
+}
+
+@keyframes label {
+  0% {
+    margin-top: -15px;
+  }
+  50% {
+    margin-top: -25px;
+  }
+  100% {
+    margin-top: -15px;
+  }
+}
+
+#log1 {
+    position: absolute;
+    left: 0;
+    color: #d30000;
+    font-weight: bold;
+    bottom: calc(100% + 3rem);
+    background: rgba(255,255,255,0.5);
+    padding: 1rem;
+    border-top-left-radius: 1rem;
+    border-radius: 1rem;
+}
+
+.close-user {
+    font-size: 2rem;
+    position: absolute;
+    right: 1rem;
+    top: 1rem;
+    color: white;
+    cursor: pointer;
+}
+
+.new-user-trigger {
+    padding: 1rem;
+    font-size: 1.5rem;
+    position: absolute;
+    left: inherit;
+    right: -20px;
+    top: -19px;
+    border-radius: 34rem;
+    color: white;
+    background: #2c4293;
+    height: 69px;
+    text-align: center;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    box-sizing: content-box;
+    cursor: pointer;
+    white-space: nowrap;
+    overflow: hidden;
+}
+
+
+@media (max-width: 800px) {
+  .page-body {
+    overflow: initial!important;
+  }
+
+  #signin, #new-user {
+        max-width: 300px;
+    margin: 0;
+    margin-bottom: 2rem;
+    margin-top: 2rem;
+    width: 80%;
+  }
+
+  .new-user-trigger {
+        right: -4px;
+    top: -28px;
+  }
+
+}
+
+.recover-link{
+	color: white;
+    position: absolute;
+    bottom: 72px;
+}
+</style>
+
+<tal:block define="user python:request.AUTHENTICATED_USER.getUserName()" condition="python:user=='Anonymous User'">
+<style type="text/css">
+	#login-form {
+		z-index: 1;
+	    margin-top: -197px;
+	    position: relative;
+	}
+
+	#signin,
+	#new-user {
+		margin-bottom: 3rem;
+	}
+
+	#new-user {
+		z-index: 2;
+	}
+
+	.brand-desc {
+		display: none;
+	}
+	.header-text {
+		display: none;
+	}
+	.page-body {
+		min-height: 300px!important;
+	}
+</style>
+
+</tal:block>
+
+
 <tal:block define="came_from python:request.get('came_from', '');
                 auth_tool python:here.getAuthenticationTool();
                 action_url string:logged_in">
@@ -8,25 +329,23 @@
 <tal:block define="user python:request.AUTHENTICATED_USER.getUserName()"
         condition="python:user!='Anonymous User'">
 
-
-
 <h1 i18n:translate="">Log out</h1>
 <div style="float: right; width: 25%; background-color: #fafafa; border: 1px solid #eee">
     <div style="background-color: #a0a0a0; font-weight: bold; color: white; line-height: 2em; text-align: center;" i18n:translate="">Tips</div>
     <ul style="list-style-type: none; padding: 0.5em; margin: 0">
         <li style="margin-bottom: 0.5em">
-			<strong>&raquo;</strong>
-			<tal:block i18n:translate="">Having trouble logging out? Make sure that cookies are allowed in your browser</tal:block>
-		</li>
+      <strong>&raquo;</strong>
+      <tal:block i18n:translate="">Having trouble logging out? Make sure that cookies are allowed in your browser</tal:block>
+    </li>
         <li style="margin-bottom: 0.5em">
-			<strong>&raquo;</strong>
-			<tal:block i18n:translate="">If you opened child browser windows from this one, those will maintain your authentication</tal:block>
-		</li>
+      <strong>&raquo;</strong>
+      <tal:block i18n:translate="">If you opened child browser windows from this one, those will maintain your authentication</tal:block>
+    </li>
     </ul>
 </div>
 
-<div id="log1"><tal:block  i18n:translate="">You are logged in as:</tal:block> <em><span tal:replace="user" /></em>.</div>
-<div id="log1"><a tal:define="url python:here.absolute_url()" tal:attributes="href string:${url}/logout" i18n:translate="">Logout</a></div>
+<div id="log2"><tal:block  i18n:translate="">You are logged in as:</tal:block> <em><span tal:replace="user" /></em>.</div>
+<div id="log2"><a tal:define="url python:here.absolute_url()" tal:attributes="href string:${url}/logout" i18n:translate="">Logout</a></div>
 <br />
 <tal:block tal:define="roles python:here.getAuthenticationTool().getAuthenticatedUserRoles()">
     <tal:block tal:condition="roles">
@@ -45,78 +364,149 @@
         You have no rights in this portal.
     </tal:block>
     <div id="destinet_userinfo" tal:condition="here/destinet.publisher/checkPermission"
-	 tal:content="structure here/destinet.publisher/userinfo">
+   tal:content="structure here/destinet.publisher/userinfo">
     </div>
 </tal:block>
 <br />
 </tal:block>
 
 <tal:block define="user python:request.AUTHENTICATED_USER.getUserName()" condition="python:user=='Anonymous User'">
-<h1 i18n:translate="">Log in</h1>
+  <div style="display:none;float: right; width: 25%; background-color: #fafafa; border: 1px solid #eee">
+      <div style="background-color: #a0a0a0; font-weight: bold; color: white; line-height: 2em; text-align: center;" i18n:translate="">Tips</div>
+      <ul style="list-style-type: none; padding: 0.5em; margin: 0">
+          <li style="margin-bottom: 0.5em">
+        <strong>&raquo;</strong>
+        <tal:block i18n:translate="">Having trouble logging in? Make sure that cookies are allowed in your browser</tal:block>
+      </li>
+          <li style="margin-bottom: 0.5em">
+        <strong>&raquo;</strong>
+        <tal:block i18n:translate="">Don't forget to logout or exit your browser when you're done</tal:block>
+      </li>
+          <li style="margin-bottom: 0.5em">
+        <strong>&raquo;</strong>
+        <tal:block i18n:translate="">Letting your browser to remember your username or password on this machine can be dangerous since other people might use this account to log in</tal:block>
+      </li>
+          <li style="margin-bottom: 0.5em">
+        <strong>&raquo;</strong>
+        <tal:block i18n:translate="">Forgot your password? Use the <a tal:attributes="href string:${auth_tool/absolute_url}/recover_password" i18n:name="recover-link" i18n:translate="">password recovery</a> form.</tal:block>
+      </li>
+      </ul>
+  </div>
+<div id="login-form">
+    
 
-<div style="float: right; width: 25%; background-color: #fafafa; border: 1px solid #eee">
-    <div style="background-color: #a0a0a0; font-weight: bold; color: white; line-height: 2em; text-align: center;" i18n:translate="">Tips</div>
-    <ul style="list-style-type: none; padding: 0.5em; margin: 0">
-        <li style="margin-bottom: 0.5em">
-			<strong>&raquo;</strong>
-			<tal:block i18n:translate="">Having trouble logging in? Make sure that cookies are allowed in your browser</tal:block>
-		</li>
-        <li style="margin-bottom: 0.5em">
-			<strong>&raquo;</strong>
-			<tal:block i18n:translate="">Don't forget to logout or exit your browser when you're done</tal:block>
-		</li>
-        <li style="margin-bottom: 0.5em">
-			<strong>&raquo;</strong>
-			<tal:block i18n:translate="">Letting your browser to remember your username or password on this machine can be dangerous since other people might use this account to log in</tal:block>
-		</li>
-        <li style="margin-bottom: 0.5em">
-			<strong>&raquo;</strong>
-			<tal:block i18n:translate="">Forgot your password? Use the <a tal:attributes="href string:${auth_tool/absolute_url}/recover_password" i18n:name="recover-link" i18n:translate="">password recovery</a> form.</tal:block>
-		</li>
-    </ul>
+  <form id="signin" tal:attributes="action action_url" method="post">
+  <div class="form-title" i18n:translate="">Log in</div>
+  <div class="new-user-trigger">New user ?</div>
+  <tal:block define="retry python:request.get('retry', '')">
+  <div id="log1" tal:condition="python:retry=='1'" i18n:translate="">
+      The username or password you provided are incorrect or this account doesn't have
+      enough rights to access this resource. Please try again.
+  </div>
+  </tal:block>
+
+  <span tal:condition="python:came_from!=''">
+      <input type="hidden" name="came_from" tal:attributes="value came_from" />
+  </span>
+
+
+  <div class="input-field">
+      <input autocomplete="off" type="text" name="__ac_name" id="__ac_name" size="20"
+          tal:attributes="value python:request.get('__ac_name', '')" />
+      <i class="material-icons fa fa-user"></i>
+      <label for="__ac_name" i18n:translate="">Username</label>
+  </div>
+
+  <div class="input-field">
+      <input autocomplete="off" type="password" name="__ac_password" id="__ac_password" size="20" />
+      <i class="material-icons fa fa-lock"></i>
+      <label for="__ac_password" i18n:translate="">Password</label>
+  </div>
+  <tal:block i18n:translate="">
+ 	 	<a class="recover-link" tal:attributes="href string:${auth_tool/absolute_url}/recover_password" i18n:name="recover-link" i18n:translate="">Recover password</a>
+  </tal:block>
+  <button class="login revocer" type="submit" name="submit" value=" Login " i18n:attributes="value" >Login</button>
+  <div class="check">
+    <i class="material-icons fa fa-check"></i>
+  </div>
+  </form>
 </div>
 
-<h2 i18n:translate="">Existing user</h2>
-<form tal:attributes="action action_url" method="post">
 
-<tal:block define="retry python:request.get('retry', '')">
-<div id="log1" tal:condition="python:retry=='1'" i18n:translate="">
-    The username or password you provided are incorrect or this account doesn't have
-    enough rights to access this resource. Please try again.
-</div>
-</tal:block>
 
-<span tal:condition="python:came_from!=''">
-    <input type="hidden" name="came_from" tal:attributes="value came_from" />
-</span>
+<div id="new-user">
+  <i class="close-user fa fa-times" aria-hidden="true"></i>
+  <div  class="form-title" i18n:translate="">New user</div>
 
-<div class="field">
-    <label for="__ac_name" i18n:translate="">Username</label>
-    <input type="text" name="__ac_name" id="__ac_name" size="20"
-        tal:attributes="value python:request.get('__ac_name', '')" />
+  <p i18n:translate="">First <a i18n:name="create_an_account" i18n:translate="" href="create_destinet_account_html">create an account</a>
+  as a DestiNet User, and you will receive an automatic approval, to allow you to log in straightaway.
+  Once you can log in, you can use the left hand bar options to contribute your own information to DestiNet.
+  <br i18n:name="br" />
+  <br i18n:name="br" />
+  Whenever you log in, your <strong i18n:name="MyDestinet" i18n:translate="">My DestiNet</strong> profile will appear.
+  This profile gives you access to everything you upload into the portal. It will also allow you to edit your profile.
+  </p>
+  <a class="create-account" i18n:translate="" href="create_destinet_account_html">Register</a>
 </div>
 
-<div class="field">
-    <label for="__ac_password" i18n:translate="">Password</label>
-    <input type="password" name="__ac_password" id="__ac_password" size="20" />
-</div>
+<script type="text/javascript">
+  
+$(document).ready(function(){
+  $("#signin input").on('focusout input', function(){
+  $("#signin input").each(function(i, e){
+    if($(e).val() != ""){
+      $(e).addClass('not-empty');
+    }else{
+      $(e).removeClass('not-empty');
+    }
+  });
+});
 
-<div class="field">
-    <input type="submit" name="submit" value=" Login " i18n:attributes="value" />
-</div>
 
-</form>
+  $(window).bind("load", function() {
 
-<h2 i18n:translate="">New user</h2>
+  $("#signin input").each(function(i, e){
+    if($(e).val() != ""){
+      $(e).addClass('not-empty');
+    }else{
+      $(e).removeClass('not-empty');
+    }
+  });
+})
 
-<p i18n:translate="">First <a i18n:name="create_an_account" i18n:translate="" href="create_destinet_account_html">create an account</a>
-as a DestiNet User, and you will receive an automatic approval, to allow you to log in straightaway.
-Once you can log in, you can use the left hand bar options to contribute your own information to DestiNet.
-<br i18n:name="br" />
-<br i18n:name="br" />
-Whenever you log in, your <strong i18n:name="MyDestinet" i18n:translate="">My DestiNet</strong> profile will appear.
-This profile gives you access to everything you upload into the portal. It will also allow you to edit your profile.
-</p>
+
+
+
+$(".login").on('click', function(){
+  $(this).animate({
+    fontSize : 0
+  }, 300, function(){
+    $(".check").addClass('in');
+  });
+});
+
+$('.close-user').on('click',function(){
+  $('#new-user').animate({
+    'opacity':'hide'
+  })
+  $('.new-user-trigger').animate({
+    'height':'show'
+    })
+})
+
+  $('.new-user-trigger').on('click',function(){
+      $('#new-user').animate({
+    'opacity':'show'
+    })
+    $(this).animate({
+    'height':'hide'
+    })
+  })
+
+})
+
+</script>
+
 
 </tal:block>
 

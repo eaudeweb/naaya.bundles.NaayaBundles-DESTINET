@@ -125,182 +125,186 @@ function submit_form_action(action){
 	</metal:block>
 	<table border="0" cellpadding="0" cellspacing="0" id="folderfile_list">
 		<metal:block define-slot="table_head">
-			<tr tal:condition="can_operate">
-				<metal:block define-slot="table_head_default">
-					<th class="checkbox"
-						tal:condition="btn_select">
-						<input type="checkbox" class="select-all" />
-					</th>
-					<th class="type" i18n:translate="Type (translate as a noun)">Type</th>
-					<th class="title-column" i18n:translate="">Title</th>
+		  <thead>
+				<tr tal:condition="can_operate">
+					<metal:block define-slot="table_head_default">
+						<th class="checkbox"
+							tal:condition="btn_select">
+							<input type="checkbox" class="select-all" />
+						</th>
+						<th class="type" i18n:translate="Type (translate as a noun)">Type</th>
+						<th class="title-column" i18n:translate="">Title</th>
 
-					<th class="checkin" i18n:translate="">Version</th>
-					<th class="edit" i18n:translate="">Edit</th>
+						<th class="checkin" i18n:translate="">Version</th>
+						<th class="edit" i18n:translate="">Edit</th>
 
+					</metal:block>
+					<metal:block define-slot="table_head_extend">
+						<tal:comment condition="nothing">
+							Fill this slot to add custom columns (heading for columns goes here).
+						</tal:comment>
+						<th tal:condition="ratings"
+							class="rating" i18n:translate="">Rating</th>
+					</metal:block>
+				</tr>
+			</thead>
+		</metal:block>
+		<tbody>
+			<tr tal:repeat="folder_info folders_list">
+				<metal:block define-slot="table_folders_default">
+					<tal:block define="
+						del_permission python:folder_info['del_permission'];
+						copy_permission python:folder_info['copy_permission'];
+						edit_permission python:folder_info['edit_permission'];
+						versionable python:folder_info['versionable'];
+						editable python:folder_info['editable'];
+						folder python:folder_info['self'];
+						" on-error="here/rstk/catch_unauthorized">
+						<td class="checkbox" tal:condition="btn_select">
+							<input tal:condition="python:del_permission or copy_permission"
+								type="checkbox" name="id" tal:attributes="value folder/id" />
+						</td>
+						<td class="type">
+							<img tal:define="icon folder_info/view/get_icon"
+								 tal:condition="icon"
+								 tal:attributes="src icon/url;
+												 alt icon/title;
+												 title icon/title" />
+						</td>
+						<td class="title-column">
+							<a tal:attributes="href folder/absolute_url" tal:content="folder/title_or_id" />
+							<em tal:condition="folder/can_be_seen"
+								tal:content="folder_info/view/get_info_text" />
+							<span class="available_langs" tal:condition="python:here.item_has_title(folder, folder.title)">
+								<span i18n:translate="">Item only translated in </span>
+								<span tal:repeat="lang here/gl_get_languages_map">
+									<a tal:content="python:' %s' % lang['title']"
+										tal:condition="python:not lang['selected'] and folder.getLocalProperty('title', lang['id'])"
+										tal:attributes="href python:'gl_changeLanguage?old_lang=%s' % (lang['id'])" />
+								</span>
+							</span>
+							<tal:block tal:condition="folder/can_be_seen">
+								<tal:block tal:condition="folder/has_restrictions" i18n:translate="">
+								[Limited access]
+								</tal:block>
+							</tal:block>
+							<tal:block tal:condition="python:not folder.can_be_seen()" i18n:translate="">
+								[Restricted access]
+							</tal:block>
+							<tal:block condition="folder/discussion|nothing">
+							<tal:block define="count_comments folder/count_comments" condition="count_comments" on-error="string:">
+								[<span tal:replace="count_comments" />
+								<span tal:omit-tag="" i18n:translate="">comment(s)</span>]
+							</tal:block>
+							</tal:block>
+						</td>
+
+						<td class="checkin" tal:condition="edit_permission">
+							<tal:block condition="not:versionable">n/a</tal:block>
+							<a tal:condition="python:versionable and editable" tal:attributes="href string:${folder/absolute_url}/startVersion">
+								<img src="misc_/Naaya/checkout" alt="Checkout - start new versionable" i18n:attributes="alt" />
+							</a>
+							<a tal:condition="python:versionable and not editable" tal:attributes="href string:${folder/absolute_url}/edit_html">
+								<img src="misc_/Naaya/checkin" alt="Version control" i18n:attributes="alt" />
+							</a>
+						</td>
+						<td class="edit" tal:condition="edit_permission">
+							<a tal:condition="editable" tal:attributes="href string:${folder/absolute_url}/edit_html">
+								<img src="misc_/Naaya/edit" alt="Edit" i18n:attributes="alt" />
+							</a>
+							<tal:block condition="not:editable">n/a</tal:block>
+						</td>
+						<td tal:condition="ratings" class="rating">
+							<tal:block condition="folder/user_rating_view|nothing"
+								replace="structure folder/user_rating_stars"/>
+						</td>
+					</tal:block>
 				</metal:block>
-				<metal:block define-slot="table_head_extend">
+				<metal:block define-slot="table_folders_extend">
 					<tal:comment condition="nothing">
-						Fill this slot to add custom columns (heading for columns goes here).
+						Fill this slot to add custom columns (content for folders goes here).
 					</tal:comment>
-					<th tal:condition="ratings"
-						class="rating" i18n:translate="">Rating</th>
 				</metal:block>
 			</tr>
-		</metal:block>
-		<tr tal:repeat="folder_info folders_list">
-			<metal:block define-slot="table_folders_default">
-				<tal:block define="
-					del_permission python:folder_info['del_permission'];
-					copy_permission python:folder_info['copy_permission'];
-					edit_permission python:folder_info['edit_permission'];
-					versionable python:folder_info['versionable'];
-					editable python:folder_info['editable'];
-					folder python:folder_info['self'];
-					" on-error="here/rstk/catch_unauthorized">
-					<td class="checkbox" tal:condition="btn_select">
-						<input tal:condition="python:del_permission or copy_permission"
-							type="checkbox" name="id" tal:attributes="value folder/id" />
-					</td>
-					<td class="type">
-						<img tal:define="icon folder_info/view/get_icon"
-							 tal:condition="icon"
-							 tal:attributes="src icon/url;
-											 alt icon/title;
-											 title icon/title" />
-					</td>
-					<td class="title-column">
-						<a tal:attributes="href folder/absolute_url" tal:content="folder/title_or_id" />
-						<em tal:condition="folder/can_be_seen"
-							tal:content="folder_info/view/get_info_text" />
-						<span class="available_langs" tal:condition="python:here.item_has_title(folder, folder.title)">
-							<span i18n:translate="">Item only translated in </span>
-							<span tal:repeat="lang here/gl_get_languages_map">
-								<a tal:content="python:' %s' % lang['title']"
-									tal:condition="python:not lang['selected'] and folder.getLocalProperty('title', lang['id'])"
-									tal:attributes="href python:'gl_changeLanguage?old_lang=%s' % (lang['id'])" />
+			<tr tal:repeat="object_info objects_list">
+				<metal:block define-slot="table_objects_default">
+					<tal:block define="
+						del_permission python:object_info['del_permission'];
+						copy_permission python:object_info['copy_permission'];
+						edit_permission python:object_info['edit_permission'];
+						versionable python:object_info['versionable'];
+						editable python:object_info['editable'];
+						object python:object_info['self'];
+						" on-error="here/rstk/catch_unauthorized">
+						<td class="checkbox" tal:condition="btn_select">
+							<input tal:condition="python:del_permission or copy_permission"
+								type="checkbox" name="id" tal:attributes="value object/id" />
+						</td>
+						<td class="type">
+							<img tal:define="icon object_info/view/get_icon"
+								 tal:condition="icon"
+								 tal:attributes="src icon/url;
+												 alt icon/title;
+												 title icon/title" />
+						</td>
+						<td class="title-column">
+							<a tal:attributes="href object/absolute_url" tal:content="object/title_or_id" />
+							<a tal:define="download_url object_info/view/get_download_url"
+							   tal:condition="download_url"
+							   tal:attributes="href download_url;"
+							   title="Download"
+							   i18n:attributes="title">
+							   <img tal:attributes="src string:${site_url}/misc_/Naaya/download-file.png"
+									alt="Download"
+									i18n:attributes="alt" />
+							</a>
+							<em tal:condition="object/can_be_seen"
+								tal:content="object_info/view/get_info_text" />
+							<span class="available_langs" tal:condition="python:here.item_has_title(object, object.title)">
+								<span i18n:translate="">Item only translated in </span>
+								<span tal:repeat="lang here/gl_get_languages_map">
+									<a tal:content="python:' %s' % lang['title']"
+										tal:condition="python:not lang['selected'] and object.getLocalProperty('title', lang['id'])"
+										tal:attributes="href python:'gl_changeLanguage?old_lang=%s' % (lang['id'])" />
+								</span>
 							</span>
-						</span>
-						<tal:block tal:condition="folder/can_be_seen">
-							<tal:block tal:condition="folder/has_restrictions" i18n:translate="">
-							[Limited access]
+							<tal:block condition="object/discussion|nothing">
+							<tal:block define="count_comments object/count_comments" condition="count_comments" on-error="string:">
+								[<span tal:replace="count_comments" />
+								<span tal:omit-tag="" i18n:translate="">comment(s)</span>]
 							</tal:block>
-						</tal:block>
-						<tal:block tal:condition="python:not folder.can_be_seen()" i18n:translate="">
-							[Restricted access]
-						</tal:block>
-						<tal:block condition="folder/discussion|nothing">
-						<tal:block define="count_comments folder/count_comments" condition="count_comments" on-error="string:">
-							[<span tal:replace="count_comments" />
-							<span tal:omit-tag="" i18n:translate="">comment(s)</span>]
-						</tal:block>
-						</tal:block>
-					</td>
+							</tal:block>
+						</td>
 
-					<td class="checkin" tal:condition="edit_permission">
-						<tal:block condition="not:versionable">n/a</tal:block>
-						<a tal:condition="python:versionable and editable" tal:attributes="href string:${folder/absolute_url}/startVersion">
-							<img src="misc_/Naaya/checkout" alt="Checkout - start new versionable" i18n:attributes="alt" />
-						</a>
-						<a tal:condition="python:versionable and not editable" tal:attributes="href string:${folder/absolute_url}/edit_html">
-							<img src="misc_/Naaya/checkin" alt="Version control" i18n:attributes="alt" />
-						</a>
-					</td>
-					<td class="edit" tal:condition="edit_permission">
-						<a tal:condition="editable" tal:attributes="href string:${folder/absolute_url}/edit_html">
-							<img src="misc_/Naaya/edit" alt="Edit" i18n:attributes="alt" />
-						</a>
-						<tal:block condition="not:editable">n/a</tal:block>
-					</td>
-					<td tal:condition="ratings" class="rating">
-						<tal:block condition="folder/user_rating_view|nothing"
-							replace="structure folder/user_rating_stars"/>
-					</td>
-				</tal:block>
-			</metal:block>
-			<metal:block define-slot="table_folders_extend">
-				<tal:comment condition="nothing">
-					Fill this slot to add custom columns (content for folders goes here).
-				</tal:comment>
-			</metal:block>
-		</tr>
-		<tr tal:repeat="object_info objects_list">
-			<metal:block define-slot="table_objects_default">
-				<tal:block define="
-					del_permission python:object_info['del_permission'];
-					copy_permission python:object_info['copy_permission'];
-					edit_permission python:object_info['edit_permission'];
-					versionable python:object_info['versionable'];
-					editable python:object_info['editable'];
-					object python:object_info['self'];
-					" on-error="here/rstk/catch_unauthorized">
-					<td class="checkbox" tal:condition="btn_select">
-						<input tal:condition="python:del_permission or copy_permission"
-							type="checkbox" name="id" tal:attributes="value object/id" />
-					</td>
-					<td class="type">
-						<img tal:define="icon object_info/view/get_icon"
-							 tal:condition="icon"
-							 tal:attributes="src icon/url;
-											 alt icon/title;
-											 title icon/title" />
-					</td>
-					<td class="title-column">
-						<a tal:attributes="href object/absolute_url" tal:content="object/title_or_id" />
-						<a tal:define="download_url object_info/view/get_download_url"
-						   tal:condition="download_url"
-						   tal:attributes="href download_url;"
-						   title="Download"
-						   i18n:attributes="title">
-						   <img tal:attributes="src string:${site_url}/misc_/Naaya/download-file.png"
-								alt="Download"
-								i18n:attributes="alt" />
-						</a>
-						<em tal:condition="object/can_be_seen"
-							tal:content="object_info/view/get_info_text" />
-						<span class="available_langs" tal:condition="python:here.item_has_title(object, object.title)">
-							<span i18n:translate="">Item only translated in </span>
-							<span tal:repeat="lang here/gl_get_languages_map">
-								<a tal:content="python:' %s' % lang['title']"
-									tal:condition="python:not lang['selected'] and object.getLocalProperty('title', lang['id'])"
-									tal:attributes="href python:'gl_changeLanguage?old_lang=%s' % (lang['id'])" />
-							</span>
-						</span>
-						<tal:block condition="object/discussion|nothing">
-						<tal:block define="count_comments object/count_comments" condition="count_comments" on-error="string:">
-							[<span tal:replace="count_comments" />
-							<span tal:omit-tag="" i18n:translate="">comment(s)</span>]
-						</tal:block>
-						</tal:block>
-					</td>
+						<td class="checkin" tal:condition="edit_permission">
+							<tal:block condition="not:versionable">n/a</tal:block>
+							<a tal:condition="python:versionable and editable" tal:attributes="href string:${object/absolute_url}/startVersion">
+								<img src="misc_/Naaya/checkout" alt="Checkout - start new versionable" i18n:attributes="alt" />
+							</a>
+							<a tal:condition="python:versionable and not editable" tal:attributes="href string:${object/absolute_url}/edit_html">
+								<img src="misc_/Naaya/checkin" alt="Version control" i18n:attributes="alt" />
+							</a>
+						</td>
+						<td class="edit" tal:condition="edit_permission">
+							<a tal:condition="editable" tal:attributes="href string:${object/absolute_url}/edit_html">
+								<img src="misc_/Naaya/edit" alt="Edit" i18n:attributes="alt" />
+							</a>
+							<tal:block condition="not:editable">n/a</tal:block>
+						</td>
+						<td tal:condition="ratings" class="type">
+							<tal:block define="user_rating object/user_rating_stars_numbers|nothing"
+								condition="object/is_ratable|nothing" replace="structure user_rating"/>
+						</td>
 
-					<td class="checkin" tal:condition="edit_permission">
-						<tal:block condition="not:versionable">n/a</tal:block>
-						<a tal:condition="python:versionable and editable" tal:attributes="href string:${object/absolute_url}/startVersion">
-							<img src="misc_/Naaya/checkout" alt="Checkout - start new versionable" i18n:attributes="alt" />
-						</a>
-						<a tal:condition="python:versionable and not editable" tal:attributes="href string:${object/absolute_url}/edit_html">
-							<img src="misc_/Naaya/checkin" alt="Version control" i18n:attributes="alt" />
-						</a>
-					</td>
-					<td class="edit" tal:condition="edit_permission">
-						<a tal:condition="editable" tal:attributes="href string:${object/absolute_url}/edit_html">
-							<img src="misc_/Naaya/edit" alt="Edit" i18n:attributes="alt" />
-						</a>
-						<tal:block condition="not:editable">n/a</tal:block>
-					</td>
-					<td tal:condition="ratings" class="type">
-						<tal:block define="user_rating object/user_rating_stars_numbers|nothing"
-							condition="object/is_ratable|nothing" replace="structure user_rating"/>
-					</td>
-
-				</tal:block>
-			</metal:block>
-			<metal:block define-slot="table_objects_extend">
-				<tal:comment condition="nothing">
-					Fill this slot to add custom columns (content for objects goes here).
-				</tal:comment>
-			</metal:block>
-		</tr>
+					</tal:block>
+				</metal:block>
+				<metal:block define-slot="table_objects_extend">
+					<tal:comment condition="nothing">
+						Fill this slot to add custom columns (content for objects goes here).
+					</tal:comment>
+				</metal:block>
+			</tr>
+		</tbody>
 	</table>
 </form>
 

@@ -1,0 +1,127 @@
+<tal:block define="curr_lang python:request.get('lang', None) or here.gl_get_selected_language();">
+  <metal:block use-macro="here/widget_macro/macros/widget">
+    <metal:block fill-slot="input">
+      <tal:block define="editor here/getEditorTool"
+          condition="here/tinymce|nothing"
+          replace="structure python:editor.render(prop_id, curr_lang, image_support=True)" />
+      <tal:block
+        define='strippedvalue python:here.html2text(value).strip();
+                my_text here/get_bestpractice_custom_description|nothing;
+                value python:test(strippedvalue, value, my_text);'>
+        <textarea tal:condition="strippedvalue"
+          tal:attributes="
+            rows here/rows;
+            cols here/columns;
+            name string:${prop_id}:utf8:ustring;
+            id prop_id"
+            tal:content="structure value">
+        </textarea>
+        <textarea tal:condition="not:strippedvalue"
+          tal:attributes="rows here/rows;
+                          cols here/columns;
+                          name string:${prop_id}:utf8:ustring;
+                          id prop_id">
+          <table cellpadding="5" cellspacing="0" border="1" width="768px">
+            <tbody>
+              <tr>
+                <td width="200" style="text-align:center">
+                  <span style="color: red" i18n:translate="">LOGO (> link to certification programme)</span>
+                </td>
+                <td>
+                  <span style="color: red" i18n:translate="">SHORT INFO (max 500 characters):</span>
+                </td>
+              </tr>
+              <tr>
+                <td>
+                  <strong i18n:translate="">Certifying Organisation</strong>
+                </td>
+                <td>
+                  <span style="color: red" i18n:translate="">(> link to "Who is Who")</span>
+                </td>
+              </tr>
+              <tr>
+                <td>
+                  <strong i18n:translate="">Partner Organisation/s</strong>
+                </td>
+                <td>
+                </td>
+              </tr>
+              <tr>
+                <td>
+                  <strong i18n:translate="">License Period (years)</strong>
+                </td>
+                <td>
+                </td>
+              </tr>
+              <tr>
+                <td>
+                  <strong i18n:translate="">Certified Tourism (nr)</strong>
+                </td>
+                <td>
+                </td>
+              </tr>
+              <tr>
+                <td>
+                  <strong i18n:translate="">Services</strong>
+                </td>
+                <td>
+                  <span style="color: red" i18n:translate="">(if yes: please mark and insert link)</span>
+                </td>
+              </tr>
+              <tr>
+                <td>
+                </td>
+                <td>
+                  <ul>
+                    <li>
+                      <tal:block i18n:translate="">Standard published online for free</tal:block> <span style="color: red" i18n:translate="">(>link)</span>
+                    </li>
+                    <li>
+                      <tal:block i18n:translate="">Self-check online</tal:block> <span style="color: red" i18n:translate="">(>link)</span>
+                    </li>
+                    <li>
+                      <tal:block i18n:translate="">Training or advice</tal:block> <span style="color: red" i18n:translate="">(>link)</span>
+                    </li>
+                    <li>
+                      <tal:block i18n:translate="">Tourism2030 - Green Travel Maps partner</tal:block> <span style="color: red" i18n:translate="">(>link)</span>
+                    </li>
+                    <li>
+                      <tal:block i18n:translate="">Tourism2030 – Atlas of Excellence partner</tal:block> <span style="color: red" i18n:translate="">(>link)</span>
+                    </li>
+                    <li>
+                      <tal:block i18n:translate="">Internship for students</tal:block> <span style="color: red" i18n:translate="">(>link)</span>
+                    </li>
+                    <li>
+                      <tal:block i18n:translate="">Online application</tal:block> <span style="color: red" i18n:translate="">(>link)</span>
+                    </li>
+                    <li>
+                      <tal:block i18n:translate="">Newsletter</tal:block> <span style="color: red" i18n:translate="">(>link)</span>
+                    </li>
+                    <li>
+                      <tal:block i18n:translate="">Networking platform</tal:block> <span style="color: red" i18n:translate="">(>link)</span>
+                    </li>
+                    <li>
+                      <tal:block i18n:translate="">Monitoring/Benchmarking</tal:block> <span style="color: red" i18n:translate="">(>link)</span>
+                    </li>
+                    <li>
+                      <tal:block i18n:translate="">Transparent pricing policy</tal:block> <span style="color: red" i18n:translate="">(>link)</span>
+                    </li>
+                    <li>
+                      <tal:block i18n:translate="">Consumer communication</tal:block> <span style="color: red" i18n:translate="">(>link)</span>
+                    </li>
+                    <li>
+                      <tal:block i18n:translate="">Complaint management</tal:block> <span style="color: red" i18n:translate="">(>link)</span>
+                    </li>
+                    <li>
+                      <tal:block i18n:translate="">Other:</tal:block> <span style="color: red" i18n:translate="">(please specify) (>link)</span>
+                    </li>
+                  </ul>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </textarea>
+      </tal:block>
+    </metal:block>
+  </metal:block>
+</tal:block>

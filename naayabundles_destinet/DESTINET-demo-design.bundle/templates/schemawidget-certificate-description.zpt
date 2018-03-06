@@ -86,7 +86,7 @@
                       <tal:block i18n:translate="">Tourism2030 - Green Travel Maps partner</tal:block> <span style="color: red" i18n:translate="">(>link)</span>
                     </li>
                     <li>
-                      <tal:block i18n:translate="">Tourism2030 – Atlas of Excellence partner</tal:block> <span style="color: red" i18n:translate="">(>link)</span>
+                      <tal:block i18n:translate="">Tourism2030 - Atlas of Excellence partner</tal:block> <span style="color: red" i18n:translate="">(>link)</span>
                     </li>
                     <li>
                       <tal:block i18n:translate="">Internship for students</tal:block> <span style="color: red" i18n:translate="">(>link)</span>

@@ -22,7 +22,7 @@
     <link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.6-rc.0/css/select2.min.css" rel="stylesheet" />
     <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.6-rc.0/js/select2.min.js"></script>
     <script type="text/javascript" src="/++resource++Products.Naaya/lib/datatables/jquery.dataTables.min.js"></script>
-    <script type="text/javascript" src="http://cdn.datatables.net/plug-ins/1.10.16/sorting/diacritics-sort.js"></script>
+    <script type="text/javascript" src="https://cdn.datatables.net/plug-ins/1.10.16/sorting/diacritics-sort.js"></script>
     <link rel="stylesheet" type="text/css" href="/++resource++Products.Naaya/lib/datatables/jquery.dataTables.css" />
     <style>
       .show_more{
@@ -70,12 +70,13 @@
             $(this).attr('src', plus_url);
           }
         });
-
-        $('#folderfile_list').DataTable({
-          'sPaginationType': 'full_numbers',
-          "pageLength": 10,
-          "lengthMenu": [ [10, 15, 25, 50, 100, -1], [10, 15, 25, 50, 100, "All"] ]
-        });
+        if ($('#folderfile_list table tr').length > 0){
+          $('#folderfile_list').DataTable({
+            'sPaginationType': 'full_numbers',
+            "pageLength": 10,
+            "lengthMenu": [ [10, 15, 25, 50, 100, -1], [10, 15, 25, 50, 100, "All"] ]
+          });
+        }
 
         $('#compas_topics').click(function(event) {
           event.preventDefault();
@@ -265,13 +266,13 @@
                 tal:attributes="href string:${here/absolute_url}/index_atom">
                 &nbsp;</a>
             <a class="facebook_link" rel="external"
-                tal:attributes="href string:http://www.facebook.com/sharer.php?u=${here/absolute_url}">
+                tal:attributes="href string:https://www.facebook.com/sharer.php?u=${here/absolute_url}">
                 &nbsp;</a>
             <a class="twitter_link" rel="external"
-                tal:attributes="href string:http://twitter.com/intent/tweet?text=${here/absolute_url}">
+                tal:attributes="href string:https://twitter.com/intent/tweet?text=${here/absolute_url}">
                 &nbsp;</a>
             <a class="linkedin_link" rel="external"
-                tal:attributes="href string:http://www.linkedin.com/shareArticle?mini=true&url=${here/absolute_url}&title=${here/site_title}, ${here/title_or_id}">
+                tal:attributes="href string:https://www.linkedin.com/shareArticle?mini=true&url=${here/absolute_url}&title=${here/site_title}, ${here/title_or_id}">
                 &nbsp;</a>
           </div>
         </div>

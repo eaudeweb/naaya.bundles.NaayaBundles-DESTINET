@@ -118,9 +118,6 @@ $(document).ready(function(){
       </tr>
     </thead>
     <tbody>
-      <tr tal:condition="not:records">
-        <td colspan="7" i18n:translate="">No locations found</td>
-      </tr>
       <tr tal:repeat="record records" tal:condition="records">
         <tal:block define="has_view record/title_or_id"
           on-error="structure string:<td colspan='6'></strong>Access to <a href='${record/absolute_url}'>${record/getId}</a> is restricted</strong></td>">

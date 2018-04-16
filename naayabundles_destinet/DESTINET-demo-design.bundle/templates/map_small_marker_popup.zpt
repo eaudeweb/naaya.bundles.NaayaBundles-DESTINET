@@ -1,0 +1,7 @@
+<div class="marker-less"
+  tal:define="object options/object;
+              card_src object/get_card_src|nothing">
+  <img class="small-card" tal:attributes="src card_src" tal:condition="card_src" />
+  <a i18n:translate="" tal:attributes="href string:${object/absolute_url}/"
+    tal:content="python:here.utToUtf8(object.title_or_id())"/>  <span tal:replace="options/access_str"/>
+</div>

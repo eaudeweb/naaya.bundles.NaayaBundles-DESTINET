@@ -109,9 +109,6 @@ $(document).ready(function(){
           <a id="geo_address" i18n:translate="">Address</a>
         </th>
         <th scope="col" class="scope-col">
-          <span i18n:translate="">Latitude/Longitude</span>
-        </th>
-        <th scope="col" class="scope-col">
           <a id="coverage" i18n:translate="">Country</a>
         </th>
         <th tal:condition="ratable_records" scope="col" class="scope-col" i18n:translate="">Rating</th>
@@ -129,13 +126,12 @@ $(document).ready(function(){
                      alt python:here.getSymbolTitle(record.geo_type);
                      title python:here.getSymbolTitle(record.geo_type);" />
         </td>
-        <td><a tal:attributes="href string:${record/absolute_url}" tal:content="record/title_or_id" /></td>
+        <td tal:define="logo record/get_card_src|nothing">
+          <span class="small-card" tal:condition="logo"><img
+              tal:attributes="src logo" /></span>
+          <a tal:attributes="href string:${record/absolute_url}" tal:content="record/title_or_id" />
+        </td>
         <td tal:content="record/geo_location/address" />
-        <td tal:define="lat record/geo_location/lat;
-                lon record/geo_location/lon;
-                latitude python:'%2.6f' % lat;
-                longitude python:'%2.6f' % lon;"
-          tal:content="string:${latitude}/${longitude}" />
         <td tal:condition="record/coverage" tal:content="record/coverage" />
         <td tal:condition="not:record/coverage" tal:content="string:---" />
         <td tal:condition="ratable_records" class="type" style="width: 15%;">

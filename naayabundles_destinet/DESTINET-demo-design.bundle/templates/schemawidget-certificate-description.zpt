@@ -21,11 +21,12 @@
                           cols here/columns;
                           name string:${prop_id}:utf8:ustring;
                           id prop_id">
-          <table cellpadding="5" cellspacing="0" border="1" width="768px">
+          <table cellpadding="5" cellspacing="0" border="0" width="768px">
             <tbody>
               <tr>
                 <td width="200" style="text-align:center">
-                  <span style="color: red" i18n:translate="">LOGO (> link to certification programme)</span>
+                  <span class="card" style="color: red" i18n:translate="">
+                    LOGO (> link to certification programme)</span>
                 </td>
                 <td>
                   <span style="color: red" i18n:translate="">SHORT INFO (max 500 characters):</span>

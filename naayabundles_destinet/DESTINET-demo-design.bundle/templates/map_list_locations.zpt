@@ -106,9 +106,6 @@ $(document).ready(function(){
           <a id="title" i18n:translate="">Title</a>
         </th>
         <th scope="col" class="scope-col">
-          <a id="geo_address" i18n:translate="">Address</a>
-        </th>
-        <th scope="col" class="scope-col">
           <a id="coverage" i18n:translate="">Country</a>
         </th>
         <th tal:condition="ratable_records" scope="col" class="scope-col" i18n:translate="">Rating</th>
@@ -131,7 +128,6 @@ $(document).ready(function(){
               tal:attributes="src logo" /></span>
           <a tal:attributes="href string:${record/absolute_url}" tal:content="record/title_or_id" />
         </td>
-        <td tal:content="record/geo_location/address" />
         <td tal:condition="record/coverage" tal:content="record/coverage" />
         <td tal:condition="not:record/coverage" tal:content="string:---" />
         <td tal:condition="ratable_records" class="type" style="width: 15%;">

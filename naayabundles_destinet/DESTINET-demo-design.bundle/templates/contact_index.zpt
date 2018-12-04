@@ -147,52 +147,52 @@
         <!--     </td> -->
         <!-- </tr> -->
 
-    <tal:block define="categories python:
-        {'Organization Category': getattr(here, 'category-organization', None),
-        'Marketplace Category': getattr(here, 'category-marketplace', None),
-        'Supporting Solutions Category': getattr(here, 'category-supporting-solutions', None)};"
-        >
-        <tal:cond tal:define="category python:categories['Organization Category']" condition="category | nothing">
-            <tr tal:define="
-                title python:portal_map.getSymbolTitle(category);
-                picture python:portal_map.getSymbolPicture(category)"
-                tal:condition="python: title != ''">
-                <th i18n:translate="">Organization Type</th>
-                <td>
-                    <img tal:condition="picture | nothing" 
-                        tal:attributes="src string:${portal_map/absolute_url}/getSymbolPicture?id=${category}; alt title; title title" />
-                    <span tal:replace="title" />
-                </td>
-            </tr>
-        </tal:cond>
-        <tal:cond tal:define="category python:categories['Marketplace Category']" condition="category | nothing">
-            <tr tal:define="
-                title python:portal_map.getSymbolTitle(category);
-                picture python:portal_map.getSymbolPicture(category)"
-                tal:condition="python: title != ''">
-                <th i18n:translate="">Marketplace Type</th>
-                <td>
-                    <img tal:condition="picture | nothing" 
-                        tal:attributes="src string:${portal_map/absolute_url}/getSymbolPicture?id=${category}; alt title; title title" />
-                    <span tal:replace="title" />
-                </td>
-            </tr>
-        </tal:cond>
-        <tal:cond tal:define="category python:categories['Supporting Solutions Category']" condition="category | nothing">
-            <tr tal:define="
-                title python:portal_map.getSymbolTitle(category);
-                picture python:portal_map.getSymbolPicture(category)"
-                tal:condition="python: title != ''">
-                <th i18n:translate="">Supporting Solutions Type</th>
-                <td>
-                    <img tal:condition="picture" 
-                        tal:attributes="src string:${portal_map/absolute_url}/getSymbolPicture?id=${category}; alt title; title title" />
-                    <span tal:replace="title" />
-                </td>
-            </tr>
-        </tal:cond>
+        <tal:block define="categories python:
+            {'Organization Category': getattr(here, 'category-organization', None),
+            'Marketplace Category': getattr(here, 'category-marketplace', None),
+            'Supporting Solutions Category': getattr(here, 'category-supporting-solutions', None)};"
+            >
+            <tal:cond tal:define="category python:categories['Organization Category']" condition="category | nothing">
+                <tr tal:define="
+                    title python:portal_map.getSymbolTitle(category);
+                    picture python:portal_map.getSymbolPicture(category)"
+                    tal:condition="python: title != ''">
+                    <th i18n:translate="">Organization Type</th>
+                    <td>
+                        <img tal:condition="picture | nothing" 
+                            tal:attributes="src string:${portal_map/absolute_url}/getSymbolPicture?id=${category}; alt title; title title" />
+                        <span tal:replace="title" />
+                    </td>
+                </tr>
+            </tal:cond>
+            <tal:cond tal:define="category python:categories['Marketplace Category']" condition="category | nothing">
+                <tr tal:define="
+                    title python:portal_map.getSymbolTitle(category);
+                    picture python:portal_map.getSymbolPicture(category)"
+                    tal:condition="python: title != ''">
+                    <th i18n:translate="">Marketplace Type</th>
+                    <td>
+                        <img tal:condition="picture | nothing" 
+                            tal:attributes="src string:${portal_map/absolute_url}/getSymbolPicture?id=${category}; alt title; title title" />
+                        <span tal:replace="title" />
+                    </td>
+                </tr>
+            </tal:cond>
+            <tal:cond tal:define="category python:categories['Supporting Solutions Category']" condition="category | nothing">
+                <tr tal:define="
+                    title python:portal_map.getSymbolTitle(category);
+                    picture python:portal_map.getSymbolPicture(category)"
+                    tal:condition="python: title != ''">
+                    <th i18n:translate="">Supporting Solutions Type</th>
+                    <td>
+                        <img tal:condition="picture" 
+                            tal:attributes="src string:${portal_map/absolute_url}/getSymbolPicture?id=${category}; alt title; title title" />
+                        <span tal:replace="title" />
+                    </td>
+                </tr>
+            </tal:cond>
 
-    </tal:block>
+        </tal:block>
 
         <tal:block tal:condition="python:here.checkPermissionEditObject()" content="structure python: here.prop_display_tr('keywords')" />
 
@@ -216,6 +216,9 @@
             <td><a tal:attributes="href string:${here/absolute_url}/export_vcard" i18n:translate="">vCard Format</a></td>
         </tr>
         </table>
+
+        <div id="destinet_usersubmissions" tal:condition="here/destinet.publisher/checkPermission"
+         tal:content="structure here/destinet.publisher/usersubmissions" />
 
         <tal:block content="structure here/set_content_rating" />
         <tal:block content="structure here/comments_box" tal:condition="python:here.checkPermissionEditObject()" />

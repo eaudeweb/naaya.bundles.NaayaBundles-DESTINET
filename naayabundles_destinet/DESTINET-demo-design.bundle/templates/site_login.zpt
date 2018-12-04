@@ -364,8 +364,9 @@
         You have no rights in this portal.
     </tal:block>
     <div id="destinet_userinfo" tal:condition="here/destinet.publisher/checkPermission"
-   tal:content="structure here/destinet.publisher/userinfo">
-    </div>
+         tal:content="structure here/destinet.publisher/userinfo" />
+    <div id="destinet_usersubmissions" tal:condition="here/destinet.publisher/checkPermission"
+         tal:content="structure here/destinet.publisher/usersubmissions" />
 </tal:block>
 <br />
 </tal:block>

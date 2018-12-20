@@ -217,7 +217,7 @@
         </tr>
         </table>
 
-        <div id="destinet_usersubmissions" tal:condition="here/destinet.publisher/checkPermission"
+        <div id="destinet_usersubmissions" tal:condition="python: 'who-who/destinet-users' in here.absolute_url()"
          tal:content="structure here/destinet.publisher/usersubmissions" />
 
         <tal:block content="structure here/set_content_rating" />

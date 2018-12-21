@@ -1,7 +1,41 @@
 <span tal:replace="structure here/standard_html_header" />
 
 <tal:block define="is_ratable here/is_ratable">
-	<h1><img tal:attributes="src python:test(here.approved, here.icon, here.icon_marked); title here/get_meta_label; alt here/get_meta_label" /> <span tal:replace="here/title_or_id" />
+    <div class="content-actions" tal:define="site here/getSite;
+                                            site_url site/absolute_url;
+                                            notif_tool python: site.portal_notification;
+                                            notif_url notif_tool/absolute_url;
+                                            subscriptions_url string:${notif_url}/my_subscriptions_html">
+    
+                        <a href="javascript:this.print();" class="btn btn-content"><i class="fa fa-print"></i> Print</a>
+                        <button class="btn btn-content" id="share_button"><i class="fa fa-share"></i> Share</button>
+                        <div class="folder_social">
+                            <tal:block content="structure here/set_content_rating" />
+                            <div class="folder_social_icons">
+                            <div id="fb-root"></div>
+                            <a class="feed_link" rel="external"
+                                tal:attributes="href string:${here/absolute_url}/index_atom">
+                                &nbsp;</a>
+                            <a class="facebook_link" rel="external"
+                                tal:attributes="href string:http://www.facebook.com/sharer.php?u=${here/absolute_url}">
+                                &nbsp;</a>
+                            <a class="twitter_link" rel="external"
+                                tal:attributes="href string:http://twitter.com/intent/tweet?text=${here/absolute_url}">
+                                &nbsp;</a>
+                            <a class="linkedin_link" rel="external"
+                                tal:attributes="href string:http://www.linkedin.com/shareArticle?mini=true&url=${here/absolute_url}&title=${here/site_title}, ${here/title_or_id}">
+                                &nbsp;</a>
+                            </div>
+                        </div>
+                        <form method="get" tal:attributes="action string:${site_url}/search_html" class="search-form">
+                          <div class="search-wrapper">
+                            <input id="query" type="text" name="query:utf8:ustring" accesskey="4"  class="search-input" type="text" placeholder="Search"/><i class="fa fa-search"></i>
+                               <input type="submit" value="GO" class="search_btn" />
+                          </div>
+                        </form>
+    
+    </div>
+    <h1><img tal:attributes="src python:test(here.approved, here.icon, here.icon_marked); title here/get_meta_label; alt here/get_meta_label" /> <span tal:replace="here/title_or_id" />
 		<tal:block condition="is_ratable" replace="structure here/user_rating_view|nothing"/>
 		<span class="available_langs" tal:condition="python:here.item_has_title(here, here.title)">
 			<span i18n:translate="">Item only translated in </span>

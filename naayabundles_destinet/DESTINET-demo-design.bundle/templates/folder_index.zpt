@@ -60,7 +60,7 @@
 
 <tal:block define="right_portlets python:here.get_right_portlets_locations_objects(here)">
 
-<div id="center_content" class="main-content">
+<div id="center_content" tal:attributes="class python:test(len(right_portlets) > 0 or request.AUTHENTICATED_USER.has_role(['Manager', 'Administrator'], here), 'main-content', 'main-content no-portlets')">
 <tal:block define="objects_info here/checkPermissionManageObjects;
     folders_list python:objects_info[6];
     objects_list python:objects_info[7];
@@ -176,13 +176,9 @@
 
 </tal:block>
 
-<p tal:condition="python:request.AUTHENTICATED_USER.getUserName() == 'Anonymous User' and here.getLocalProperty('show_contributor_request_role')">
-    <a tal:attributes="href string:${here/absolute_url}/requestrole_html">Create an account on this server and apply for contribution rights</a>
-</p>
-
-        <tal:block tal:repeat="item python:here.portal_portlets.get_portlets_for_obj(here, 'center')">
-                <span tal:replace="structure python:item({'here': here, 'portlet_macro': 'portlet_center_macro'})" />
-        </tal:block>
+<tal:block tal:repeat="item python:here.portal_portlets.get_portlets_for_obj(here, 'center')">
+        <span tal:replace="structure python:item({'here': here, 'portlet_macro': 'portlet_center_macro'})" />
+</tal:block>
 
 <span tal:replace="structure here/comments_box" />
 </div>

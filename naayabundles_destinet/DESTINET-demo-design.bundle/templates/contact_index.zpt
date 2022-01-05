@@ -97,10 +97,10 @@
             <th i18n:translate="">Phone Number</th>
             <td tal:content="here/phone">phone</td>
         </tr>
-        <tr tal:condition="here/fax | nothing">
+<!--        <tr tal:condition="here/fax | nothing">
             <th i18n:translate="">Fax Number</th>
             <td tal:content="here/fax">fax</td>
-        </tr>
+        </tr>-->
         <tr tal:condition="here/cellphone | nothing">
             <th i18n:translate="">Mobile</th>
             <td tal:content="here/cellphone">cellphone</td>
@@ -149,10 +149,6 @@
         <tr tal:condition="here/coverage | nothing">
             <th i18n:translate="">Country</th>
             <td tal:content="here/coverage" />
-        </tr>
-        <tr tal:condition="python: here.keywords and (not here.checkPermissionEditObject())">
-            <th i18n:translate="">Keywords</th>
-            <td tal:content="here/keywords" />
         </tr>
         <!-- <tr tal:define="title python:portal_map.getSymbolTitle(here.geo_type); -->
         <!--     picture python:portal_map.getSymbolPicture(here.geo_type)" -->
@@ -216,7 +212,7 @@
             <td tal:content="python:here.utShowDateTime(here.expiry_date)" />
         </tr>
 
-        <tr tal:condition="here/id_number | nothing">
+        <tr tal:condition="python:here.checkPermissionEditObject() and getattr(here, 'id_number', None)">
             <th i18n:translate="">ID Number</th>
             <td tal:content="here/id_number" />
         </tr>

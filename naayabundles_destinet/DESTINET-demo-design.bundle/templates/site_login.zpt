@@ -440,11 +440,10 @@
   <div  class="form-title" i18n:translate="">New user</div>
 
   <p i18n:translate="">First <a i18n:name="create_an_account" i18n:translate="" href="create_destinet_account_html">create an account</a>
-  as a DestiNet User, and you will receive an automatic approval, to allow you to log in straightaway.
-  Once you can log in, you can use the left hand bar options to contribute your own information to DestiNet.
+  as a Tourism2030 User, and you will receive an automatic approval, to allow you to log in straightaway. Once you can log in, you can contribute your own information to DestiNetTourism2030.
   <br i18n:name="br" />
   <br i18n:name="br" />
-  Whenever you log in, your <strong i18n:name="MyDestinet" i18n:translate="">My DestiNet</strong> profile will appear.
+  Whenever you log in, your <strong i18n:name="MyDestinet" i18n:translate="">Tourism2030</strong> profile will appear.
   This profile gives you access to everything you upload into the portal. It will also allow you to edit your profile.
   </p>
   <a class="create-account" i18n:translate="" href="create_destinet_account_html">Register</a>

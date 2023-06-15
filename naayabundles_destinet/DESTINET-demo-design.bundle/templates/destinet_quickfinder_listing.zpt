@@ -65,62 +65,9 @@
           event.preventDefault();
         });
 
-        $('.to_select2').select2()
+        $('.select2').select2()
 
         //map configuration
-        if(country){
-          $('#country').val(country[0]).trigger('change.select2');
-        }
-
-        $('#category').select2({placeholder: 'All'})
-        if(category){
-          $('#category').val(category).trigger('change.select2');
-        }
-        $('#category').change(function(){
-          if ($(this).val() !== null && $(this).val().indexOf("all") !== -1){
-            $(this).val("").trigger('change');
-          }
-        });
-
-        $('#landscape_type').select2({placeholder: 'All'})
-        if(landscape_type){
-          $('#landscape_type').val(landscape_type[0]).trigger('change.select2');
-        }
-        $('#landscape_type').change(function(){
-          if ($(this).val() !== null && $(this).val().indexOf("all") !== -1){
-            $(this).val("").trigger('change');
-          }
-        });
-
-        $('#gstc_criteria').select2({placeholder: 'All'})
-        if(gstc_criteria){
-          $('#gstc_criteria').val(gstc_criteria).trigger('change.select2');
-        }
-        $('#gstc_criteria').change(function(){
-          if ($(this).val() !== null){
-		    if ($(this).val().indexOf("all") !== -1) {
-              $(this).val("").trigger('change');
-			} else {
-              $('#gstc_industry').val(null).trigger('change');
-			}
-          }
-        });
-
-        $('#gstc_industry').select2({placeholder: 'All'})
-        if(gstc_industry){
-          $('#gstc_criteria').val(null).trigger('change');
-          $('#gstc_industry').val(gstc_industry).trigger('change.select2');
-        }
-        $('#gstc_industry').change(function(){
-          if ($(this).val() !== null){
-		    if ($(this).val().indexOf("all") !== -1) {
-              $(this).val("").trigger('change');
-			} else {
-              $('#gstc_criteria').val(null).trigger('change');
-			}
-          }
-        });
-
         $('#geo_query').select2({
           allowClear: true,
           placeholder: 'Enter keyword',
@@ -134,14 +81,43 @@
           },
           templateResult: function (data) {
             var $result = $("<span />");
+
             $result.text(data.text);
+
             return $result;
           }
         });
-        $('#geo_query').change(function(){
-          refreshMap();
+
+        if(selected_country){
+          $('#country').val(selected_country[0]).trigger('change.select2');
+          $('#address').val(address || selected_country[0]);
+          findAddress();
+          clearTimeout(refreshTimer);
+        }
+
+        //map configuration
+        if(category){
+          $('#category').val(category[0]).trigger('change.select2');
+        }
+        if(credibility){
+          $('#credibility').val(credibility[0]).trigger('change.select2');
+        }
+        if(administrative_level){
+          $('#administrative_level').val(administrative_level[0]).trigger('change.select2');
+        }
+        if(sustainability){
+          $('#sustainability').val(sustainability[0]).trigger('change.select2');
+        }
+        if(certificate_services !== 'all'){
+          $('#certificate_services').val(certificate_services[0]).trigger('change.select2');
+        }
+        $('#certificate_services').select2({placeholder: 'All'})
+        $('#certificate_services').change(function(){
+          if ($(this).val() !== null && $(this).val().indexOf("") !== -1){
+            $(this).val("").trigger('change');
+          }
         });
-        
+
         $('.map-refresh').change(function(){
           refreshMap();
         });
@@ -161,6 +137,14 @@
           );
           return $state;
         };
+        $('#country').change(function(){
+          var this_country = $(this).val();
+          if (this_country != ''){
+            $('#address').val(this_country);
+            findAddress();
+            clearTimeout(refreshTimer); 
+        }
+        });
       });
     </script>
   </metal:head>
@@ -171,7 +155,10 @@
                     objects_list python:objects_info[7];
                     logo here/getFolderLogo;
                     portal_map here/getGeoMapTool;
-                    target_groups python:here.REQUEST.get('target_groups', [])">
+                    events python:'Naaya Event' in here.REQUEST.get('meta_types', []);
+                    news python:'Naaya News' in here.REQUEST.get('meta_types', []);
+                    target_groups python:here.REQUEST.get('target_groups', []);
+                    location python:here.REQUEST.get('location')">
     <div id="center_content" tal:attributes="class python:test(len(here.get_right_portlets_locations_objects(here)) > 0 or request.AUTHENTICATED_USER.has_role(['Manager', 'Administrator'], here), 'main-content', 'main-content no-portlets')">
       <script type="text/javascript" src="++resource++destinet.keywords/keywords.js"></script>
 
@@ -249,56 +236,133 @@
 
       <p tal:condition="python:here.description!=''" tal:content="structure here/description" />
 
+      <table id="main_listing" class="datatable" tal:condition="python:location in ['events', 'tools', 'news']">
+        <input id="template_id" type="hidden" tal:attributes="value context/id" />
+        <input id="meta_type" type="hidden" tal:attributes="value python:test(events, 'Naaya Event', test(news, 'Naaya News', ''))" />
+        <input id="target_groups" type="hidden" tal:attributes="value context/REQUEST/target_groups|string:" />
+        <thead>
+          <tr>
+            <th tal:condition="python:location == 'tools'">
+              <select>
+                <option i18n:translate="" value="all">All object types</option>
+                <option tal:repeat="obj_type here/get_object_types" 
+                  tal:attributes="value obj_type"
+                  tal:content="obj_type" />
+              </select>
+            </th>
+            <th i18n:translate="">Name</th>
+            <th i18n:translate="">Coverage</th>
+            <th tal:condition="python:location == 'tools'">
+              <select>
+                <option i18n:translate="" value="all">All target groups</option>
+                <option tal:repeat="node python:here.get_list_nodes('target-groups')" 
+                  tal:attributes="value node/id"
+                  tal:content="node/title" />
+              </select>
+            </th>
+          </tr>
+        <thead>
+      </table>
+
       <!-- BEGIN MAP INTEGRATION -->
       <link rel="stylesheet" type="text/css"
         tal:attributes="href python:here.getSite().absolute_url()+'/++resource++destinet.listing/map_integration.css'" />
       <tal:map
-        define="topics python:request.get('topics', []);
-                geo_types request/geo_types|python:[];
-                gstc_criteria request/gstc_criteria|python:[];
-                gstc_industry request/gstc_industry|python:[];
-                category request/category|python:[];
+        define="geo_types python:request.get('geo_types', portal_map.getSymbolsIds());
+                topics python:request.get('topics', []);
+                meta_types python:request.get('meta_types', []);
+                geo_query request/geo_query|string:;
+                address request/address|string:;
+                administrative_level request/administrative_level|python:[];
                 country request/country|python:[];
-                landscape_type request/landscape_type|python:[];
-                geo_query request/geo_query|nothing;
-                address request/address|nothing;
-                path python:'/'.join(here.getSite().getPhysicalPath()) + '/' + request.get('path', '');
+                credibility request/credibility|python:[];
+                category request/category|python:[];
+                certificate_services request/certificate_services|string:'all';
+                sustainability request/sustainability|python:[];
                 zoom request/zoom|nothing;
+                path python:'/'.join(here.getSite().getPhysicalPath()) + '/' + request.get('path', '');
                 map_only python:request.get('map_only', 0);
                 map_override python:{};
                 ">
+        <script tal:content="structure python:'var address = \'%s\';' % address"></script>
         <tal:address condition="address">
           <tal:block define="dummy python:map_override.setdefault('initial_address', address)" />
         </tal:address>
-        <tal:block content="structure python:portal_map.setup_map_engine_html(request, **map_override)" />
+        <script tal:content="structure python:'var administrative_level = %s;' % administrative_level"></script>
         <script tal:content="structure python:'var category = %s;' % category"></script>
-        <script tal:content="structure python:'var landscape_type = %s;' % landscape_type"></script>
-        <script tal:content="structure python:'var gstc_criteria = %s;' % gstc_criteria"></script>
-        <script tal:content="structure python:'var gstc_industry = %s;' % gstc_industry"></script>
-        <script tal:content="structure python:'var country = %s;' % country"></script>
+        <script tal:content="structure python:'var certificate_services = %s;' % certificate_services"></script>
+        <script tal:content="structure python:'var credibility = %s;' % credibility"></script>
+        <script tal:content="structure python:'var geo_query = \'%s\';' % geo_query"></script>
+        <script tal:content="structure python:'var geo_types = %s;' % geo_types"></script>
+        <script tal:content="structure python:'var selected_country = %s;' % country"></script>
+        <script tal:content="structure python:'var sustainability = %s;' % sustainability"></script>
+        <tal:block content="structure python:portal_map.setup_map_engine_html(request, **map_override)" />
         <script type="text/javascript" tal:attributes="src string:${portal_map/absolute_url}/map_i18n_js"></script>
         <script type="text/javascript" tal:attributes="src string:${portal_map/absolute_url}/geomaptool.js"></script>
         <script tal:content="structure python:'var portal_map_url=%s;' % here.rstk.json_dumps(portal_map.absolute_url())"></script>
 
         <form action="." name="frmFilterMap" method="get" id="frmFilterMap" class="clearfix">
-		  <div class="first-row clearfix">
-            <div class="portalmap_portlet portalmap_filter">
-              <div class="portalmap_portlet_title" i18n:translate="">Filter by (GSTC for destinations and GSTC for industry are mutually exclusive):</div>
-            </div>
-		  </div>
           <div class="first-row clearfix" id="filter_map">
-            <div class="portalmap_portlet portalmap_filter" style="display:none">
+            <div class="portalmap_portlet portalmap_filter" tal:attributes="style python:test(here.checkPermissionPublishObjects(), None, 'display: None')">
+              <div class="portalmap_portlet_title" i18n:translate="">
+                Filter by Keyword
+              </div>
+              <select name="geo_query" id="geo_query" class="map-refresh">
+                <option></option>
+                <option tal:content="item"
+                  tal:attributes="value item;
+                                  selected python:test(geo_query, 'selected', None)"
+                  tal:repeat="item python:
+                    [x.title for x in here.getSite().keywords_glossary.get_all_elements() if x.title.strip()] +
+                    [node.title for node in here.getSite().portal_portlets['user-groups'].get_tree_nodes()
+                        if x.title.strip()] + [geo_query]" />
+              </select>
+            </div>
+
+            <div class="portalmap_portlet portalmap_filter" tal:condition="parentsList"
+              tal:define="parentsList portal_map/getParentsListOrdered">
+              <div class="portalmap_portlet_title" i18n:translate="">Category</div>
+
+              <div class="org_list" tal:define="geo_types python:[org_type.id for org_type in portal_map.getSymbolChildrenOrdered('symbol984')];">
+                <select name="category" id="category" class="map-refresh select2">
+                  <option value="">All</option>
+                  <tal:block repeat="geo_type geo_types">
+                    <option tal:attributes="value geo_type"
+                      tal:content="python:portal_map.getSymbolTitle(geo_type)" />
+                  </tal:block>
+                </select>
+              </div>
+            </div>
+            <div class="portalmap_portlet portalmap_filter" tal:condition="parentsList"
+              tal:define="parentsList portal_map/getParentsListOrdered" style="display:none">
               <div class="portalmap_portlet_title" i18n:translate="">Category</div>
 
               <div class="org_list">
-                <select name="geo_types" id="geo_types" multiple="multiple">
-                  <option value="symbol818" selected="selected">Best practice destinations</option>
-                  <option value="symbol519" selected="selected">Best practice industry</option>
+                <select name="geo_types" id="geo_types">
+                  <option value="symbol998" selected="selected">Certificate</option>
                 </select>
               </div>
             </div>
 
-            <div class="portalmap_portlet portalmap_filter" style="display:none">
+            <div class="portalmap_portlet portalmap_filter">
+              <div class="portalmap_portlet_title" i18n:translate="">Filter by country of operation</div>
+              <div class="country_list">
+                <select name="country" id="country" class="map-refresh select2"
+                  tal:define="glossary python:here.getSite()['countries_glossary']">
+                  <option value="">All</option>
+                  <option tal:attributes="value item/title;"
+                    tal:content="item/title"
+                    tal:repeat="item python:glossary.get_all_elements(sort_on='name')"/>
+                </select>
+
+                <!--<option tal:attributes="value python:item[0]; selected python:test(item[0] in geo_query, 'selected', None)"
+                tal:content="python:item[1]"
+                tal:repeat="item certificate_keywords" />-->
+
+              </div>
+            </div>
+
+            <div class="portalmap_portlet portalmap_filter">
               <div class="portalmap_portlet_title" i18n:translate="">
                 Zoom to location
               </div>
@@ -310,77 +374,79 @@
                 value="Go" disabled="disabled" onclick="findAddress()" i18n:attributes="value"/>
               </div>
             </div>
-
-            <div class="portalmap_portlet portalmap_filter">
-              <div class="portalmap_portlet_title" i18n:translate="">Keyword</div>
-              <select name="geo_query" id="geo_query">
-                <option></option>
-                <option tal:content="item"
-                  tal:attributes="value item;
-                                  selected python:test(geo_query, 'selected', None)"
-                  tal:repeat="item python:
-                    [x.title for x in here.getSite().keywords_glossary.get_all_elements() if x.title.strip()] +
-                    [node.title for node in here.getSite().portal_portlets['user-groups'].get_tree_nodes()
-                        if x.title.strip()] + [geo_query]" />
-              </select>
-            </div>
- 
-            <div class="portalmap_portlet portalmap_filter">
-              <div class="portalmap_portlet_title" i18n:translate="">Country</div>
-              <div class="country_list">
-                <select name="country" id="country" class="to_select2 map-refresh"
-                  tal:define="glossary python:here.getSite()['countries_glossary']">
+          </div>
+          <div class="second-row">
+            <div class="portalmap_portlet portalmap_filter"
+              tal:define="administrative_list python:here.get_list_nodes('administrative_level')">
+              <div class="portalmap_portlet_title" i18n:translate="">Operational level</div>
+              <div class="operational_level">
+                <select name="administrative_level" id="administrative_level" class="map-refresh select2">
                   <option value="">All</option>
-                  <option tal:attributes="value item/title"
-                    tal:content="item/title"
-                    tal:repeat="item python:glossary.get_all_elements(sort_on='name')"/>
-                </select>
-              </div>
-            </div>
-
-            <div class="portalmap_portlet portalmap_filter">
-              <div class="portalmap_portlet_title" i18n:translate="">Categories</div>
-              <div class="org_list">
-                <select name="category" id="category" multiple="multiple" class="to_select2 map-refresh"
-                    tal:define="geo_types python:[org_type.id for org_type in portal_map.getSymbolChildrenOrdered('symbol984')];">
-                  <option value="">All</option>
-                  <tal:block repeat="geo_type geo_types">
-                    <option tal:attributes="value geo_type"
-                      tal:content="python:portal_map.getSymbolTitle(geo_type)" />
-                  </tal:block>
+                  <option tal:attributes="value item/id"
+                          tal:content="item/title"
+                          tal:repeat="item administrative_list" />
                 </select>
               </div>
             </div>
 
             <div class="portalmap_portlet portalmap_filter"
-              tal:define="gstc_criteria python:here.get_list_nodes('gstc_criteria')">
-              <div class="portalmap_portlet_title" i18n:translate="">GSTC for destinations</div>
-              <select id="gstc_criteria" name="gstc_criteria" multiple="multiple" class="to_select2 map-refresh">
-                <option value="all">All</option>
-                <option tal:repeat="item gstc_criteria"
-                  tal:attributes="value item/id" tal:content="item/title" />
-              </select>
+              tal:define="sustainability_types python:here.get_list_nodes('certificate_sustainability')">
+              <div class="portalmap_portlet_title" i18n:translate="">Sustainability</div>
+              <div class="sustainability">
+                <select name="sustainability" id="sustainability" class="map-refresh select2">
+                  <option value="">All</option>
+                  <option tal:attributes="value item/id"
+                          tal:content="item/title"
+                          tal:repeat="item sustainability_types" />
+                </select>
+              </div>
             </div>
 
             <div class="portalmap_portlet portalmap_filter"
-              tal:define="gstc_industry python:here.get_list_nodes('gstc_industry')">
-              <div class="portalmap_portlet_title" i18n:translate="">GSTC for industry</div>
-              <select id="gstc_industry" name="gstc_industry" multiple="multiple" class="to_select2 map-refresh">
-                <option value="all">All</option>
-                <option tal:repeat="item gstc_industry"
-                  tal:attributes="value item/id" tal:content="item/title" />
-              </select>
+              tal:define="credibility_types python:here.get_list_nodes('certificate_credibility')">
+              <div class="portalmap_portlet_title" i18n:translate="">Credibility</div>
+              <div class="credibility">
+                <select name="credibility" id="credibility" class="map-refresh select2">
+                <option value="">All</option>
+                  <option tal:attributes="value item/id"
+                          tal:content="item/title"
+                          tal:repeat="item credibility_types" />
+                </select>
+              </div>
             </div>
 
             <div class="portalmap_portlet portalmap_filter"
-              tal:define="landscape_list python:here.get_list_nodes('landscape_type')" style="display:none">
-              <div class="portalmap_portlet_title" i18n:translate="">Filter by landscape type</div>
-              <select id="landscape_type" name="landscape_type" multiple="multiple" class="to_select2 map-refresh">
-                <option value="all">All</option>
-                <option tal:repeat="item landscape_list"
-                  tal:attributes="value item/id" tal:content="item/title" />
-              </select>
+              tal:define="services_types python:here.get_list_nodes('certificate_services')">
+              <div class="portalmap_portlet_title" i18n:translate="">Services</div>
+              <div class="certificate_services">
+                <select name="services" id="certificate_services" multiple="multiple" class="map-refresh">
+                  <option tal:attributes="value item/id"
+                          tal:content="item/title"
+                          tal:repeat="item services_types" />
+                </select>
+              </div>
             </div>
+          </div>
+
+          <div class="portalmap_portlet_box" style="display:none">
+            <div class="topics_list"
+              tal:define="topics_list python:here.get_list_nodes('topics')">
+              <input id="topics_list" type="checkbox" class="map_hidden_checkbox"
+                onclick="javascript:toggleChildren(this)"/>
+              <span class="category_title" i18n:translate="">Topics</span>
+              <img src="misc_/Naaya/plus.gif" class="category_img"/>
+              <ul class="category_child">
+                <li tal:repeat="item topics_list">
+                  <input type="checkbox" name="topics:list" class="map_hidden_checkbox"
+                       tal:attributes="value item/id; id item/id;
+                       checked python:item.id in topics" />
+                  <label tal:attributes="for item/id" class="category_title"
+                  i18n:translate="" tal:content="item/title" />
+                </li>
+              </ul>
+            </div>
+            <input tal:repeat="meta_type meta_types" type="hidden" name="meta_types:list"
+              class="meta_type_list" tal:attributes="value meta_type" />
             <input type="hidden" id="path" name="path"
               tal:attributes="value path" />
           </div>
@@ -393,12 +459,12 @@
             <span tal:condition="not:map_only" i18n:translate="">
               Displaying <strong i18n:name="counter" id="record_counter"></strong>&nbsp;location(s).
             </span>&nbsp;
-            <tal:block condition="here/checkPermissionAddObjects">
-              <a rel="nofollow" href="" style="display:none" id="view_as_list">View as list &#183;</a>
-            </tal:block>
+            <a rel="nofollow" tal:condition="here/checkPermissionAddObjects"
+              href="" style="display:none" id="view_as_list" target="view_as_list">View as list</a>
             <tal:block condition="here/checkPermissionEditObjects">
-              <a rel="nofollow" href="" style="display:none" id="view_as_map">Link to portal map &#183;</a>
-              <a rel="nofollow" href="" style="display:none" id="view_this_map">Link to this filtered map</a>
+              <a href="" rel="nofollow" style="display:none" id="view_as_map">&#183; Link to portal map</a>
+              <a href="" rel="nofollow" style="display:none" id="view_this_map">&#183; Link to this filtered map</a>
+              <a href="" rel="nofollow" style="display:none" id="download_georss">&#183; Export GeoRSS</a>
             </tal:block>
           </p>
           <div id="center_content_map" style="overflow-x: auto;">
@@ -413,7 +479,7 @@
           <input type="hidden" name="lon_min" />
           <input type="hidden" name="lon_max" />
           <input type="hidden" name="symbols" />
-          <input type="hidden" name="geo_query" id="geo_query" />
+          <input type="hidden" name="geo_query" />
         </form>
 
       </tal:map>

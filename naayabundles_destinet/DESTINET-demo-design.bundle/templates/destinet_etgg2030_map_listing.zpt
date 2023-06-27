@@ -68,9 +68,9 @@
         countries_array = [];
         $('#coverage option').each(function(){
             if($(this).hasClass('folder')){
-        countries_array.push({id: $(this).val(), text: '<div class="folder">'+$(this).val()+'<'+'/div>'})
+              countries_array.push({id: $(this).val(), text: '<div class="folder">'+$(this).val()+'<'+'/div>'})
             } else {
-                countries_array.push({id: $(this).val(), text: '<div class="element">'+$(this).val()+'<'+'/div>'})
+              countries_array.push({id: $(this).val(), text: '<div class="element">'+$(this).val()+'<'+'/div>'})
             }
         })
 
@@ -89,35 +89,108 @@
         }
 
         //map configuration
-        $('#geo_types').select2({placeholder: 'Select at least one organisation type'})
-        if(geo_types.length > 0){
-          $('#geo_types').val(geo_types).trigger('change.select2');
-        } else {
-          $('#geo_types').val(all_geo_types).trigger('change.select2');
+
+        $('#geo_types').select2();
+
+        $('#org_types').select2({placeholder: 'Show organisation types'});
+        if(geo_types.length){
+          const org_types = geo_types.filter(element => all_org_types.includes(element));
+          if (org_types.length){
+            $('#org_types').val(org_types).trigger('change.select2');
+          }
         } 
-        $('#geo_types').change(function(){
-          if ($(this).val() == null || $(this).val().indexOf("all") !== -1){
-            $('#geo_types option').each(function(){
+        $('#org_types').change(function(){
+          if ($(this).val() != null && $(this).val().indexOf("all") !== -1){
+            $('#org_types option').each(function(){
               if ($(this).value !== 'all'){
                 $(this).attr('selected', 'selected');
               }
-              $('#geo_types option[value="all"]').removeAttr('selected');
-              $('#geo_types').trigger('change.select2');
+              $('#org_types option[value="all"]').removeAttr('selected');
+              $('#org_types').trigger('change.select2');
             });
           };
+          checkAndReset()
+          updateGeoTypes();
+        })
+
+        $('#market_types').select2({placeholder: 'Show market place orgs'});
+        if(geo_types.length){
+          const market_types = geo_types.filter(element => all_market_types.includes(element));
+          if (market_types.length){
+            $('#market_types').val(market_types).trigger('change.select2');
+          }
+        } 
+        $('#market_types').change(function(){
+          if ($(this).val() != null && $(this).val().indexOf("all") !== -1){
+            $('#market_types option').each(function(){
+              if ($(this).value !== 'all'){
+                $(this).attr('selected', 'selected');
+              }
+              $('#market_types option[value="all"]').removeAttr('selected');
+              $('#market_types').trigger('change.select2');
+            });
+          };
+          checkAndReset()
+          updateGeoTypes();
+        })
+
+        $('#going_green_types').select2({placeholder: 'Show Going Green orgs'});
+        if(geo_types.length){
+          const going_green_types = geo_types.filter(element => all_going_green_types.includes(element));
+          if (going_green_types.length){
+            $('#going_green_types').val(going_green_types).trigger('change.select2');
+          }
+        } 
+        $('#going_green_types').change(function(){
+          if ($(this).val() != null && $(this).val().indexOf("all") !== -1){
+            $('#going_green_types option').each(function(){
+              if ($(this).value !== 'all'){
+                $(this).attr('selected', 'selected');
+              }
+              $('#going_green_types option[value="all"]').removeAttr('selected');
+              $('#going_green_types').trigger('change.select2');
+            });
+          };
+          checkAndReset()
+          updateGeoTypes();
+        })
+
+        $('#solution_types').select2({placeholder: 'Show market solutions'});
+        if(geo_types.length){
+          const solution_types = geo_types.filter(element => all_solution_types.includes(element));
+          if (solution_types.length){
+            $('#solution_types').val(solution_types).trigger('change.select2');
+          }
+        } 
+        $('#solution_types').change(function(){
+          if ($(this).val() != null && $(this).val().indexOf("all") !== -1){
+            $('#solution_types option').each(function(){
+              if ($(this).value !== 'all'){
+                $(this).attr('selected', 'selected');
+              }
+              $('#solution_types option[value="all"]').removeAttr('selected');
+              $('#solution_types').trigger('change.select2');
+            });
+          };
+          checkAndReset()
+          updateGeoTypes()
         })
 
         $('#keyword').select2();
-        if($('#keyword').val()){
-          $('#geo_query').val($('#keyword').val() + ' ' + $('#certificate').val() + ' ' + 'certified gtm');
+        if (geo_query.length){
+          if (typeof(geo_query) == 'string'){
+            $('#keyword').val(geo_query).trigger('change.select2');
+            $('#geo_query').val(geo_query).trigger('change');
+          } else if (typeof(geo_query) == 'object') {
+            const keyword = geo_query.filter(element => all_keywords.includes(element));
+            if (keyword.length){
+              $('#keyword').val(keyword[0]).trigger('change.select2');
+              $('#geo_query').val(keyword[0]).trigger('change');
+            }
+          }
         }
         $('#keyword').change(function(){
-          if($(this).val()){
-            $('#geo_query').val($(this).val() + ' ' + $('#certificate').val() + ' ' + 'certified gtm');
-          } else {
-            $('#geo_query').val($('#certificate').val() + ' ' + 'certified gtm');
-          }
-          refreshMap();
+          $('#geo_query').val($(this).val());
         });
 
         $('#coverage').change(function(){
@@ -133,28 +206,47 @@
           refreshMap();
         });
 
-        $('#geo_query').select2({
-          allowClear: true,
-          placeholder: 'Enter keyword',
-          tags: true,
-          createTag: function (params) {
-            return {
-              id: params.term,
-              text: params.term,
-              newOption: true
-            }
-          },
-          templateResult: function (data) {
-            var $result = $("<span />");
-
-            $result.text(data.text);
-
-            return $result;
+        $('#agenda2030_sdgs').select2({placeholder: ''})
+        $('#agenda2030_sdgs').change(function(){
+          if ($(this).val() !== null && $(this).val().indexOf("all") !== -1){
+            $(this).val("").trigger('change');
           }
-        });
-        $('#geo_query').change(function(){
           refreshMap();
         });
+
+        checkAndReset()
+        updateGeoTypes()
+        refreshMap();
+
+        function updateGeoTypes(){
+          res = [];
+          if ($('#org_types').val() != null){
+            res = $('#org_types').val();
+          }
+          if ($('#market_types').val() != null){
+            res = res.concat($('#market_types').val());
+          }
+          if ($('#going_green_types').val() != null){
+            res = res.concat($('#going_green_types').val());
+          }
+          if ($('#solution_types').val() != null){
+            res = res.concat($('#solution_types').val());
+          }
+          $('#geo_types').val(res).trigger('change.select2');
+          refreshMap();
+        }
+
+        function checkAndReset(){
+          if ($('#org_types').val() == null &&
+              $('#market_types').val() == null &&
+              $('#going_green_types').val() == null &&
+              $('#solution_types').val() == null) {
+                $('#org_types').val(all_org_types).trigger('change.select2');
+                $('#market_types').val(all_market_types).trigger('change.select2');
+                $('#going_green_types').val(all_going_green_types).trigger('change.select2');
+                $('#solution_types').val(all_solution_types).trigger('change.select2');
+              }
+        }
 
         function refreshMap(){
           clearTimeout(refreshTimer);
@@ -265,19 +357,32 @@
         tal:attributes="href python:here.getSite().absolute_url()+'/++resource++destinet.listing/map_integration.css'" />
       <tal:map
         define="topics python:request.get('topics', []);
-                geo_types request/geo_types|python:[];
-                coverage request/coverage|python:[];
+                coverage python:request.get('coverage', []);
                 geo_query request/geo_query|string:;
                 address request/address|string:;
                 path python:'/'.join(here.getSite().getPhysicalPath()) + '/' + request.get('path', '');
                 zoom request/zoom|nothing;
                 map_only python:request.get('map_only', 0);
                 map_override python:{};
-                all_geo_types python:[org_type.id for org_type in portal_map.getSymbolChildrenOrdered('symbol984')] + [org_type.id for org_type in portal_map.getSymbolChildrenOrdered('symbol247')]
-                + [org_type.id for org_type in portal_map.getSymbolChildrenOrdered('symbol921')];
+                all_org_types python:[org_type.id for org_type in portal_map.getSymbolChildrenOrdered('symbol921')];
+                all_market_types python:[org_type.id for org_type in portal_map.getSymbolChildrenOrdered('symbol984')];
+                all_going_green_types python:[org_type.id for org_type in portal_map.getSymbolChildrenOrdered('symbol845')];
+                all_solution_types python:[org_type.id for org_type in portal_map.getSymbolChildrenOrdered('symbol247')];
+                geo_types python:request.get('geo_types', []);
+                all_geo_types python: [org_type.id for org_type in portal_map.getSymbolChildrenOrdered('symbol921')] +
+                              [org_type.id for org_type in portal_map.getSymbolChildrenOrdered('symbol984')] + 
+                              [org_type.id for org_type in portal_map.getSymbolChildrenOrdered('symbol845')] + 
+                              [org_type.id for org_type in portal_map.getSymbolChildrenOrdered('symbol247')];
+                all_keywords python: [x.title.strip() for x in here.getSite().keywords_glossary.get_all_elements() if x.title.strip()] +
+                                     [node.title.strip() for node in here.getSite().portal_portlets['user-groups'].get_tree_nodes()
+                                      if node.title.strip()]
                 ">
         <script tal:content="structure python:'var geo_types = %s;' % geo_types"></script>
-        <script tal:content="structure python:'var all_geo_types = %s;' % all_geo_types"></script>
+        <script tal:content="structure python:'var all_org_types = %s;' % all_org_types"></script>
+        <script tal:content="structure python:'var all_market_types = %s;' % all_market_types"></script>
+        <script tal:content="structure python:'var all_going_green_types = %s;' % all_going_green_types"></script>
+        <script tal:content="structure python:'var all_solution_types = %s;' % all_solution_types"></script>
+        <script tal:content="structure python:'var all_keywords = %s;' % all_keywords"></script>
         <script tal:content="structure python:'var geo_query = \'%s\';' % geo_query"></script>
         <script tal:content="structure python:'var selected_country = %s;' % coverage"></script>
         <script tal:content="structure python:'var address = \'%s\';' % address"></script>
@@ -290,18 +395,29 @@
         <script tal:content="structure python:'var portal_map_url=%s;' % here.rstk.json_dumps(portal_map.absolute_url())"></script>
 
         <form action="." name="frmFilterMap" method="get" id="frmFilterMap" class="clearfix">
+
+          <!--<input name="geo_types" id="geo_types" class="map-refresh" type="hidden" />-->
+
           <div class="first-row clearfix" id="filter_map">
             <div class="portalmap_portlet portalmap_filter" tal:attributes="style python:test(here.checkPermissionPublishObjects(), None, 'display: None')">
               <div class="portalmap_portlet_title" i18n:translate="">Filter by Keyword</div>
-              <select name="keyword" id="keyword">
+              <select name="keyword" id="keyword" class="map-refresh">
                 <option></option>
                 <option tal:content="item"
                   tal:attributes="value item"
-                  tal:repeat="item python:
-                    [x.title for x in here.getSite().keywords_glossary.get_all_elements() if x.title.strip()] +
-                    [node.title for node in here.getSite().portal_portlets['user-groups'].get_tree_nodes()
-                        if x.title.strip()]" />
+                  tal:repeat="item all_keywords" />
               </select>
+            </div>
+
+            <div class="portalmap_portlet portalmap_filter">
+              <div class="portalmap_portlet_title" i18n:translate="">Filter by SDG</div>
+              <div class="country_list" tal:define="sdg_list python:here.get_list_nodes('agenda2030_sdgs')">
+                <select name="agenda2030_sdgs" id="agenda2030_sdgs" multiple="multiple">
+                  <option value="all"></option>
+                    <option tal:repeat="item sdg_list"
+                      tal:attributes="value item/id" tal:content="item/title" />
+                </select>
+              </div>
             </div>
 
             <div class="portalmap_portlet portalmap_filter">
@@ -338,19 +454,70 @@
               <input type="hidden" name="geo_query" id="geo_query" tal:attributes="value geo_query" />
             </div>
 
-            <div class="portalmap_portlet portalmap_filter">
-              <div class="portalmap_portlet_title" i18n:translate="">Selected categories</div>
+            <div class="portalmap_portlet portalmap_filter" style="display: none">
+              <div class="portalmap_portlet_title" i18n:translate="">Geo Types</div>
               <div class="org_list">
-                <select name="geo_types" id="geo_types" multiple="multiple" class="map-refresh">
-                  <option value="all">All</option>
+                <select name="geo_types" id="geo_types" multiple="multiple">
                   <tal:block repeat="geo_type all_geo_types">
-                    <option tal:attributes="value geo_type;selected python:test(geo_type in geo_types,'selected', None)"
-                      tal:content="python:portal_map.getSymbolTitle(geo_type)" />
+                    <option tal:attributes="value geo_type"
+                            tal:content="python:portal_map.getSymbolTitle(geo_type)" />
                   </tal:block>
                 </select>
               </div>
             </div>
 
+            <div class="portalmap_portlet portalmap_filter">
+              <div class="portalmap_portlet_title" i18n:translate="">Show organisation types</div>
+              <div class="org_list">
+                <select name="org_types" id="org_types" multiple="multiple">
+                  <option value="all">All</option>
+                  <tal:block repeat="org_type all_org_types">
+                    <option tal:attributes="value org_type"
+                            tal:content="python:portal_map.getSymbolTitle(org_type)" />
+                  </tal:block>
+                </select>
+              </div>
+            </div>
+
+            <div class="portalmap_portlet portalmap_filter">
+              <div class="portalmap_portlet_title" i18n:translate="">Show market place organisations</div>
+              <div class="org_list">
+                <select name="market_types" id="market_types" multiple="multiple">
+                  <option value="all">All</option>
+                  <tal:block repeat="market_type all_market_types">
+                    <option tal:attributes="value market_type"
+                            tal:content="python:portal_map.getSymbolTitle(market_type)" />
+                  </tal:block>
+                </select>
+              </div>
+            </div>
+  
+            <div class="portalmap_portlet portalmap_filter">
+              <div class="portalmap_portlet_title" i18n:translate="">Show going green organisations</div>
+              <div class="org_list">
+                <select name="going_green_types" id="going_green_types" multiple="multiple">
+                  <option value="all">All</option>
+                  <tal:block repeat="going_green_type all_going_green_types">
+                    <option tal:attributes="value going_green_type"
+                            tal:content="python:portal_map.getSymbolTitle(going_green_type)" />
+                  </tal:block>
+                </select>
+              </div>
+            </div>
+  
+            <div class="portalmap_portlet portalmap_filter">
+              <div class="portalmap_portlet_title" i18n:translate="">Show market solutions</div>
+              <div class="org_list">
+                <select name="solution_types" id="solution_types" multiple="multiple">
+                  <option value="all">All</option>
+                  <tal:block repeat="solution_type all_solution_types">
+                    <option tal:attributes="value solution_type"
+                            tal:content="python:portal_map.getSymbolTitle(solution_type)" />
+                  </tal:block>
+                </select>
+              </div>
+            </div>
+  
             <input type="hidden" id="path" name="path"
               tal:attributes="value path" />
           </div>
@@ -383,8 +550,8 @@
           <input type="hidden" name="lat_max" />
           <input type="hidden" name="lon_min" />
           <input type="hidden" name="lon_max" />
-          <input type="hidden" name="symbols" />
           <input type="hidden" name="geo_query" />
+          <input type="hidden" name="symbols" />
         </form>
 
       </tal:map>

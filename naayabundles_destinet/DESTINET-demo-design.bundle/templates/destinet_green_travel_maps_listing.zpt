@@ -136,52 +136,47 @@
           refreshMap();
         });
 
-        $('#geo_query').select2({
-          allowClear: true,
-          placeholder: 'Enter keyword',
-          tags: true,
-          createTag: function (params) {
-            return {
-              id: params.term,
-              text: params.term,
-              newOption: true
-            }
-          },
-          templateResult: function (data) {
-            var $result = $("<span />");
-
-            $result.text(data.text);
-
-            return $result;
-          }
-        });
-        $('#geo_query').change(function(){
-          refreshMap();
-        });
-
         function refreshMap(){
           clearTimeout(refreshTimer);
           refreshTimer = setTimeout(startMapRefresh, refreshInterval);
         }
 
-        function formatState (state) {
-          if (!state.id) {
-            return state.text;
-          }
-          var baseUrl = "/user/pages/images/flags";
-          var $state = $(
-            '<span><img src="' + baseUrl + '/' + state.element.value.toLowerCase() + '.png" class="img-flag" /> ' + state.text + '<' + '/span>'
-          );
-          return $state;
-        };
         $('#coverage').change(function(){
           var this_country = $(this).val();
           if (this_country != ''){
             $('#address').val(this_country);
-            findAddress();
-            clearTimeout(refreshTimer); 
-        }
+            clearTimeout(refreshTimer);
+            if (typeof map_engine !== 'undefined') {
+              map_engine.go_to_address(this_country);
+            }
+          }
         })
+
+        try {
+          $('#geo_query').select2({
+            allowClear: true,
+            placeholder: 'Enter keyword',
+            tags: true,
+            createTag: function (params) {
+              return {
+                id: params.term,
+                text: params.term,
+                newOption: true
+              }
+            },
+            templateResult: function (data) {
+              var $result = $("<span />");
+
+              $result.text(data.text);
+
+              return $result;
+            }
+          });
+          $('#geo_query').change(function(){
+            refreshMap();
+          });
+        } catch(e) {
+        }
 
       });
     </script>
@@ -394,6 +389,10 @@
               <a href="" rel="nofollow" style="display:none" id="download_georss">Export GeoRSS</a>
             </tal:block>
           </p>
+          <!-- Elements required by geomaptool.js showPageElements() -->
+          <a id="checkall" style="display:none"></a>
+          <input type="button" id="geo_query_button" style="display:none" />
+          <div id="map_links_js" style="display:none"></div>
           <div id="center_content_map" style="overflow-x: auto;">
             <div id="map"></div>
             <br clear="all" style="clear:both"/>

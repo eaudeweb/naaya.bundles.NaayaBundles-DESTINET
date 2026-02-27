@@ -293,7 +293,7 @@
                   tal:repeat="item python:
                     [x.title for x in here.getSite().keywords_glossary.get_all_elements() if x.title.strip()] +
                     [node.title for node in here.getSite().portal_portlets['user-groups'].get_tree_nodes()
-                        if x.title.strip()] + [geo_query]" />
+                        if node.title.strip()] + [geo_query]" />
               </select>
             </div>
             <div class="portalmap_portlet portalmap_filter">

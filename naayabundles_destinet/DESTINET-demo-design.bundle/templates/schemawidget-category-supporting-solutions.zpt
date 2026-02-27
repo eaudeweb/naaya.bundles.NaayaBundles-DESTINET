@@ -13,7 +13,7 @@
             tal:attributes="checked python:value and 'checked' or None" 
             class="select-enabler" />Yes
         <select class="category-selector" tal:attributes="
-            name string:${prop_id}:utf8:ustring; 
+            name string:${prop_id}:utf8:string; 
             rel value;
             id prop_id;
             style python:(not value) and 'display:none' or ''">

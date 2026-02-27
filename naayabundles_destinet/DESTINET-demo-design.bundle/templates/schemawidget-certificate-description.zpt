@@ -12,14 +12,14 @@
           tal:attributes="
             rows here/rows;
             cols here/columns;
-            name string:${prop_id}:utf8:ustring;
+            name string:${prop_id}:utf8:string;
             id prop_id"
             tal:content="structure value">
         </textarea>
         <textarea tal:condition="not:strippedvalue"
           tal:attributes="rows here/rows;
                           cols here/columns;
-                          name string:${prop_id}:utf8:ustring;
+                          name string:${prop_id}:utf8:string;
                           id prop_id">
           <table cellpadding="5" cellspacing="0" border="0" width="768px">
             <tbody>

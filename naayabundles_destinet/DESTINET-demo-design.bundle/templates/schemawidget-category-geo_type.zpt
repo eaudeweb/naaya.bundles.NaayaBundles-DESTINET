@@ -11,7 +11,7 @@
     </label>
     <p i18n:translate="">If you fill this in, the item will be displayed on the DestiNet Atlas of contacts</p>
     <p class="form-errors" tal:condition="errors" tal:content="errors" />
-    <select tal:attributes="name string:${prop_id}:utf8:ustring; id prop_id">
+    <select tal:attributes="name string:${prop_id}:utf8:string; id prop_id">
         <option value=""></option>
         <optgroup tal:repeat="geo_type_parent geo_type_parents" tal:attributes="label geo_type_parent/title">
             <option tal:repeat="geo_type_item python:here.getSite().getGeoMapTool().getSymbolChildrenOrdered(geo_type_parent.id)"

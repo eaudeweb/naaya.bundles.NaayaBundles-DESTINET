@@ -131,7 +131,7 @@
 					Zoom to location
 				</div>
 				<div class="portalmap_portlet_content">
-					<input type="text" id="address" name="address:ustring:utf8" readonly="readonly"
+					<input type="text" id="address" name="address:string:utf8" readonly="readonly"
 					tal:attributes="value request/address|string:"
 					onkeypress="return handleKeyPress(this, event);" />
 					<input style="float: right;" type="button" name="address_button" id="address_button"
@@ -150,7 +150,7 @@
 					<div class="portalmap_portlet_title" i18n:translate="">
 						by Keyword
 					</div>
-					<input type="text" id="geo_query" name="geo_query:ustring:utf8"
+					<input type="text" id="geo_query" name="geo_query:string:utf8"
 					tal:attributes="value request/geo_query|string:" style="width: 80%" />
 					<input style="display:none;" type="button" name="geo_query_button"
 					id="geo_query_button" disabled="disabled" value="Go"

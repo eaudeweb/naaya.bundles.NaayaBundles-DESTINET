@@ -71,7 +71,7 @@ tourism stakeholders - later you can complete your full profile to save time now
           </div>
           <div class="field-inline">
               <label>Create your username for this site</label>
-              <input type="text" name="username:utf8:ustring" size="40"
+              <input type="text" name="username:utf8:string" size="40"
                   tal:attributes="value here/getSessionUserName" />*
           </div>
           <div class="field-inline message-error" tal:condition="python:request.SESSION.get('firstname-errors')" >
@@ -79,7 +79,7 @@ tourism stakeholders - later you can complete your full profile to save time now
           </div>
           <div class="field-inline">
               <label i18n:translate="">First name</label>
-              <input type="text" name="firstname:utf8:ustring" size="40"
+              <input type="text" name="firstname:utf8:string" size="40"
                   tal:attributes="value here/getSessionUserFirstname" />*
           </div>
           <div class="field-inline message-error" tal:condition="python:request.SESSION.get('lastname-errors')" >
@@ -87,7 +87,7 @@ tourism stakeholders - later you can complete your full profile to save time now
           </div>
           <div class="field-inline">
               <label >Last name</label>
-              <input type="text" name="lastname:utf8:ustring" size="40"
+              <input type="text" name="lastname:utf8:string" size="40"
                   tal:attributes="value here/getSessionUserLastname" />*
           </div>
           <div class="field-inline message-error" tal:condition="python:request.SESSION.get('email-errors')" >
@@ -95,7 +95,7 @@ tourism stakeholders - later you can complete your full profile to save time now
           </div>
           <div class="field-inline">
               <label >Email address</label>
-              <input type="text" name="email:utf8:ustring" size="40"
+              <input type="text" name="email:utf8:string" size="40"
                   tal:attributes="value here/getSessionUserEmail" />*
           </div>
           <div class="field-inline message-error" tal:condition="python:request.SESSION.get('password-errors')" >
@@ -103,11 +103,11 @@ tourism stakeholders - later you can complete your full profile to save time now
           </div>
           <div class="field-inline">
               <label i18n:translate="" >Password</label>
-              <input type="password" name="password:utf8:ustring" size="30" value="" maxlength="255" />*
+              <input type="password" name="password:utf8:string" size="30" value="" maxlength="255" />*
           </div>
           <div class="field-inline">
               <label i18n:translate="" >Password verification:</label>
-              <input type="password" name="confirm:utf8:ustring" value=""
+              <input type="password" name="confirm:utf8:string" value=""
                   size="30" maxlength="255" />*
           </div>
           <div class="field-inline" tal:condition="python: not here.checkPermissionSkipCaptcha() and here.recaptcha_is_present()">

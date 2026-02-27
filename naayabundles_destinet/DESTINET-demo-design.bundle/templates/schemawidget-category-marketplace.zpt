@@ -69,7 +69,7 @@
             <select tal:define="option_list python:test(value and value in marketplace_ids, marketplace_list, test(value and value in goinggreen_ids, goinggreen_list))"
                 class="category-selector"
                 tal:attributes="
-                name string:${prop_id}:utf8:ustring; 
+                name string:${prop_id}:utf8:string; 
                 rel value;
                 id prop_id;
                 style python:(not value) and 'display:none' or ''">

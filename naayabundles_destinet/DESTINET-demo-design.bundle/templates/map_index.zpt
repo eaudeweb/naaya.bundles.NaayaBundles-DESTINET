@@ -25,12 +25,12 @@
 <script type="text/javascript" src="geomaptool.js"></script>
 <script type="text/javascript" src="misc_/Naaya/jquery.autocomplete.min.js"></script>
 <script tal:content="structure python:'var autocomplete_data = %s;' %
-    here.rstk.json_dumps(
+    here.rstk['json_dumps'](
         [x.title for x in here.getSite().keywords_glossary.get_all_elements()] +
         [node.title for node in
             here.getSite().portal_portlets['user-groups'].get_tree_nodes()])">
 </script>
-<script tal:content="structure python:'var portal_map_url=%s;' % here.rstk.json_dumps(here.absolute_url())"></script>
+<script tal:content="structure python:'var portal_map_url=%s;' % here.rstk['json_dumps'](here.absolute_url())"></script>
 
 <form action="." name="frmFilterMap" method="get" id="frmFilterMap">
 	<div id="center_content" style="width: 77.6%; overflow-x: auto;">

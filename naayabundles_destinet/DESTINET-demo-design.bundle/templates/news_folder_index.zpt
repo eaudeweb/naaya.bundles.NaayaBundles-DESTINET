@@ -303,7 +303,7 @@ function fRenameObjects()
 
 <div id="right_port">
 	<tal:block tal:condition="python:request.AUTHENTICATED_USER.has_role(['Manager', 'Administrator'], here)">
-		<span tal:replace="structure python:here.get_portlet_object('portlet_folder_administration')({'here': here, 'portlet_macro': 'portlet_right_macro'})" />
+		<span tal:replace="structure python:here.getPortletsTool().getPortletById('portlet_folder_administration')({'here': here, 'portlet_macro': 'portlet_right_macro'})" />
 	</tal:block>
 	<tal:block tal:repeat="item right_portlets">
 		<tal:block content="structure python:item({'here': here, 'portlet_macro': 'portlet_right_macro'})" on-error="python:here.log_page_error(error)" />

@@ -37,6 +37,7 @@
       $(document).ready(function() {
         var refreshTimer;
         var refreshInterval = 2000;
+
         $('.hidden').prev('h3').addClass('dyn-h3');
         $('.hidden').hide();
         $('.hidden').each(function() {
@@ -84,7 +85,9 @@
         if(selected_country){
           $('#coverage').val(selected_country[0]).trigger('change.select2');
           $('#address').val(address || selected_country[0]);
-          findAddress();
+          if (!window._naaya_bounds_from_url) {
+            findAddress();
+          }
           clearTimeout(refreshTimer);
         }
 
@@ -197,8 +200,10 @@
           var this_country = $(this).val();
           if (this_country != ''){
             $('#address').val(this_country);
-            findAddress();
-            clearTimeout(refreshTimer); 
+            if (!window._naaya_bounds_from_url) {
+              findAddress();
+            }
+            clearTimeout(refreshTimer);
         }
         })
 
@@ -389,10 +394,20 @@
         <tal:address condition="address">
           <tal:block define="dummy python:map_override.setdefault('initial_address', address)" />
         </tal:address>
+        <tal:bounds define="lat_min python:request.get('lat_min', None);
+                            lat_max python:request.get('lat_max', None);
+                            lon_min python:request.get('lon_min', None);
+                            lon_max python:request.get('lon_max', None)"
+                    condition="python:lat_min and lat_max and lon_min and lon_max">
+          <tal:block define="dummy python:map_override.update({
+            'lat_center': str((float(lat_min) + float(lat_max)) / 2),
+            'lon_center': str((float(lon_min) + float(lon_max)) / 2),
+          })" />
+        </tal:bounds>
         <tal:block content="structure python:portal_map.setup_map_engine_html(request, **map_override)" />
         <script type="text/javascript" tal:attributes="src string:${portal_map/absolute_url}/map_i18n_js"></script>
         <script type="text/javascript" tal:attributes="src string:${portal_map/absolute_url}/geomaptool.js"></script>
-        <script tal:content="structure python:'var portal_map_url=%s;' % here.rstk.json_dumps(portal_map.absolute_url())"></script>
+        <script tal:content="structure python:'var portal_map_url=%s;' % here.rstk['json_dumps'](portal_map.absolute_url())"></script>
 
         <form action="." name="frmFilterMap" method="get" id="frmFilterMap" class="clearfix">
 
@@ -600,7 +615,7 @@
     <div id="right_port"
         tal:define="right_portlets python:here.get_right_portlets_locations_objects(here)" >
       <tal:admin tal:condition="python:request.AUTHENTICATED_USER.has_role(['Manager', 'Administrator'], here)">
-          <span tal:replace="structure python:here.get_portlet_object('portlet_folder_administration')({'here': here, 'portlet_macro': 'portlet_right_macro'})" />
+          <span tal:replace="structure python:here.getPortletsTool().getPortletById('portlet_folder_administration')({'here': here, 'portlet_macro': 'portlet_right_macro'})" />
       </tal:admin>
       <tal:rportlets tal:repeat="item right_portlets">
           <span tal:replace="structure python:item({'here': here, 'portlet_macro': 'portlet_right_macro'})" />

@@ -207,6 +207,17 @@
 
         </tal:block>
 
+        <tr tal:define="sel_list python:here.portal_schemas.NyContact['agenda2030_sdgs-property'].get_selection_list()"
+            tal:condition="here/agenda2030_sdgs|nothing" >
+          <th i18n:translate="">Agenda2030 SDGs</th>
+          <td>
+            <ul>
+              <li tal:repeat="criteria here/agenda2030_sdgs" i18n:translate=""
+                tal:content="python:[x.title for x in sel_list if x.id == criteria][0]" />
+              </ul>
+          </td>
+        </tr>
+
         <tr tal:condition="here/expiry_date | nothing">
             <th i18n:translate="">Expiry date</th>
             <td tal:content="python:here.utShowDateTime(here.expiry_date)" />

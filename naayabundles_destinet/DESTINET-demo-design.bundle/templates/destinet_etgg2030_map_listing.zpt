@@ -382,15 +382,15 @@
                                      [node.title.strip() for node in here.getSite().portal_portlets['user-groups'].get_tree_nodes()
                                       if node.title.strip()]
                 ">
-        <script tal:content="structure python:'var geo_types = %s;' % geo_types"></script>
-        <script tal:content="structure python:'var all_org_types = %s;' % all_org_types"></script>
-        <script tal:content="structure python:'var all_market_types = %s;' % all_market_types"></script>
-        <script tal:content="structure python:'var all_going_green_types = %s;' % all_going_green_types"></script>
-        <script tal:content="structure python:'var all_solution_types = %s;' % all_solution_types"></script>
-        <script tal:content="structure python:'var all_keywords = %s;' % all_keywords"></script>
-        <script tal:content="structure python:'var geo_query = \'%s\';' % geo_query"></script>
-        <script tal:content="structure python:'var selected_country = %s;' % coverage"></script>
-        <script tal:content="structure python:'var address = \'%s\';' % address"></script>
+        <script tal:content="structure python:'var geo_types = %s;' % here.rstk['json_dumps'](geo_types)"></script>
+        <script tal:content="structure python:'var all_org_types = %s;' % here.rstk['json_dumps'](all_org_types)"></script>
+        <script tal:content="structure python:'var all_market_types = %s;' % here.rstk['json_dumps'](all_market_types)"></script>
+        <script tal:content="structure python:'var all_going_green_types = %s;' % here.rstk['json_dumps'](all_going_green_types)"></script>
+        <script tal:content="structure python:'var all_solution_types = %s;' % here.rstk['json_dumps'](all_solution_types)"></script>
+        <script tal:content="structure python:'var all_keywords = %s;' % here.rstk['json_dumps'](all_keywords)"></script>
+        <script tal:content="structure python:'var geo_query = %s;' % here.rstk['json_dumps'](geo_query)"></script>
+        <script tal:content="structure python:'var selected_country = %s;' % here.rstk['json_dumps'](coverage)"></script>
+        <script tal:content="structure python:'var address = %s;' % here.rstk['json_dumps'](address)"></script>
         <tal:address condition="address">
           <tal:block define="dummy python:map_override.setdefault('initial_address', address)" />
         </tal:address>

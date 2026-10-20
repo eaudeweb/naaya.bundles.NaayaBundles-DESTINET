@@ -489,7 +489,12 @@ function map_marker_clicked(point) {
     if (point.point_ids.length > 0 &&
       (point.num_records < 5 ||
        resolution > MAP_CLUSTER_ZOOM_RESOLUTION_THRESHOLD)) {
-      point_id_list = point.point_ids;
+      // a cluster has no tooltip: list its points in the balloon
+      var cluster_balloon = custom_balloon(point.lat, point.lon, "loading...");
+      load_marker_balloon(point.point_ids, function(html) {
+        cluster_balloon.html(html);
+      });
+      return cluster_balloon;
     } else {
       map_engine.set_center_and_zoom_in(point.lat, point.lon);
       return;

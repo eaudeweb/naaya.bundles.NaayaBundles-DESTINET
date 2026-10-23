@@ -1,4 +1,4 @@
-<span tal:replace="structure here/standard_html_header" />
+<metal:block use-macro="here/standard_template_macro"><metal:block fill-slot="body">
 
 <tal:block define="is_ratable here/is_ratable">
     <div class="content-actions" tal:define="site here/getSite;
@@ -111,4 +111,4 @@
 	<tal:block content="structure here/set_content_rating" />
 	<tal:block content="structure here/comments_box" />
 </tal:block>
-<tal:block content="structure here/standard_html_footer" />
+</metal:block></metal:block>

@@ -1,6 +1,6 @@
 <span tal:replace="python:request.RESPONSE.setHeader('content-type','application/xhtml+xml;charset=utf-8')" />
 <tal:block define="global portal_map here/getGeoMapTool"/>
-<span tal:replace="structure here/standard_html_header" />
+<metal:block use-macro="here/standard_template_macro"><metal:block fill-slot="body">
 
 <tal:block define="is_ratable here/is_ratable">
 	<h1><img tal:attributes="src python:test(here.approved, here.icon, here.icon_marked); title here/get_meta_label; alt here/get_meta_label" border="0" /> <span tal:replace="here/title_or_id" />
@@ -56,4 +56,4 @@
 	<tal:block content="structure here/set_content_rating" />
 	<tal:block content="structure here/comments_box" />
 </tal:block>
-<tal:block content="structure here/standard_html_footer" />
+</metal:block></metal:block>

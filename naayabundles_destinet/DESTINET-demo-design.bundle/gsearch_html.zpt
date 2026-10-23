@@ -1,4 +1,4 @@
-<span tal:replace="structure here/standard_html_header" />
+<metal:block use-macro="here/standard_template_macro"><metal:block fill-slot="body">
 <style>
 .gsearch-container {
   max-width: 70%;
@@ -155,4 +155,4 @@
   <!-- Google Search Result Snippet Ends -->
   <script async src="https://cse.google.com/cse.js?cx=010830385418825142702:_ltw7ubb2s0"></script>
 </div>
-<span tal:replace="structure here/standard_html_footer" />
+</metal:block></metal:block>

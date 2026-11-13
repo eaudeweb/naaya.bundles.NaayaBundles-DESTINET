@@ -110,6 +110,10 @@ tourism stakeholders - later you can complete your full profile to save time now
               <input type="password" name="confirm:utf8:string" value=""
                   size="30" maxlength="255" />*
           </div>
+          <div style="position: absolute; left: -10000px;" aria-hidden="true">
+              <label for="homepage_url">Leave this field empty</label>
+              <input type="text" id="homepage_url" name="homepage_url" value="" tabindex="-1" autocomplete="off" />
+          </div>
           <div class="field-inline" tal:condition="python: not here.checkPermissionSkipCaptcha() and here.recaptcha_is_present()">
               <label i18n:translate="" ></label>
               <div tal:content="structure python: here.show_recaptcha(here)" />

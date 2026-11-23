@@ -66,40 +66,40 @@ tourism stakeholders - later you can complete your full profile to save time now
       <input type="hidden" name="location" value="" />
 
       <div class="form">
-          <div class="field-inline message-error" tal:condition="python:request.SESSION.get('username-errors')" >
-            <div tal:content="python:request.SESSION.get('username-errors')" />
+          <div class="field-inline message-error" tal:condition="python:here.getSession('username-errors', None)" >
+            <div tal:content="python:here.getSession('username-errors', None)" />
           </div>
           <div class="field-inline">
               <label>Create your username for this site</label>
               <input type="text" name="username:utf8:string" size="40"
                   tal:attributes="value here/getSessionUserName" />*
           </div>
-          <div class="field-inline message-error" tal:condition="python:request.SESSION.get('firstname-errors')" >
-            <div tal:content="python:request.SESSION.get('firstname-errors')" />
+          <div class="field-inline message-error" tal:condition="python:here.getSession('firstname-errors', None)" >
+            <div tal:content="python:here.getSession('firstname-errors', None)" />
           </div>
           <div class="field-inline">
               <label i18n:translate="">First name</label>
               <input type="text" name="firstname:utf8:string" size="40"
                   tal:attributes="value here/getSessionUserFirstname" />*
           </div>
-          <div class="field-inline message-error" tal:condition="python:request.SESSION.get('lastname-errors')" >
-            <div tal:content="python:request.SESSION.get('lastname-errors')" />
+          <div class="field-inline message-error" tal:condition="python:here.getSession('lastname-errors', None)" >
+            <div tal:content="python:here.getSession('lastname-errors', None)" />
           </div>
           <div class="field-inline">
               <label >Last name</label>
               <input type="text" name="lastname:utf8:string" size="40"
                   tal:attributes="value here/getSessionUserLastname" />*
           </div>
-          <div class="field-inline message-error" tal:condition="python:request.SESSION.get('email-errors')" >
-            <div tal:content="python:request.SESSION.get('email-errors')" />
+          <div class="field-inline message-error" tal:condition="python:here.getSession('email-errors', None)" >
+            <div tal:content="python:here.getSession('email-errors', None)" />
           </div>
           <div class="field-inline">
               <label >Email address</label>
               <input type="text" name="email:utf8:string" size="40"
                   tal:attributes="value here/getSessionUserEmail" />*
           </div>
-          <div class="field-inline message-error" tal:condition="python:request.SESSION.get('password-errors')" >
-            <div tal:content="python:request.SESSION.get('password-errors')" />
+          <div class="field-inline message-error" tal:condition="python:here.getSession('password-errors', None)" >
+            <div tal:content="python:here.getSession('password-errors', None)" />
           </div>
           <div class="field-inline">
               <label i18n:translate="" >Password</label>
